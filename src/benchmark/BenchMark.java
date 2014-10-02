@@ -53,6 +53,22 @@ public class BenchMark {
             watch.reset();
             System.out.println("====================================================================");
             System.out.println();
+            //crcCrc32Mpeg2
+            System.out.println("###Checking with CRC32Mpeg2 Algoritm");
+            watch.start();
+            new jonelo.jacksum.cli.Jacksum(new String[]{"-a", "crc32_mpeg2", dir.getAbsolutePath()});
+            System.out.println("Checking with CRC32Mpeg2 Algoritm has completed in " + watch.getNanoTime() + " nano seconds");
+            watch.reset();
+            System.out.println("====================================================================");
+            System.out.println();
+            //crc64
+            System.out.println("###Checking with CRC64 Algoritm");
+            watch.start();
+            new jonelo.jacksum.cli.Jacksum(new String[]{"-a", "crc64", dir.getAbsolutePath()});
+            System.out.println("Checking with CRC64 Algoritm has completed in " + watch.getNanoTime() + " nano seconds");
+            watch.reset();
+            System.out.println("====================================================================");
+            System.out.println();
 
             //System.out.println(watch.getNanoTime());
         } catch (ExitException ex) {
