@@ -1,28 +1,3 @@
-/**
- * ****************************************************************************
- *
- * Jacksum version 1.7.0 - checksum utility in Java Copyright (C) 2001-2006
- * Dipl.-Inf. (FH) Johann Nepomuk Loefflmann, All Rights Reserved,
- * http://www.jonelo.de
- *
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
- * Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- * E-mail: jonelo@jonelo.de
- *
- ****************************************************************************
- */
 package jonelo.jacksum.ui;
 
 import java.io.BufferedReader;
@@ -44,18 +19,11 @@ import jonelo.sugar.util.EncodingException;
 import jonelo.sugar.util.ExitException;
 import jonelo.sugar.util.GeneralString;
 
-/**
- * This class can be used to check the file integrity of files against a given
- * file list.
- */
 public class CheckFile {
 
-    /**
-     * Lines starting with this special String are ignored
-     */
     public final static String COMMENTDEFAULT = JacksumAPI.NAME + ": Comment:";
 
-    private String CSEP = "\t"; // default separator for the checkfile
+    private String CSEP = "\t"; 
     private String checkFile = null;
     private MetaInfo metaInfo = null;
     private AbstractChecksum checksum = null;
@@ -66,88 +34,39 @@ public class CheckFile {
     private long modified = 0;
     private String workingDir = null;
 
-    /**
-     * Creates a CheckFile.
-     *
-     * @param checkFile a file containing filenames and their checksums and in
-     * best case meta-information
-     */
     public CheckFile(String checkFile) {
         this.checkFile = checkFile;
     }
 
-    /**
-     * Sets meta-information. This meta-information is the fallback if the
-     * checkFile doesn't contain meta-information.
-     *
-     * @param metInfo the MetaInfo object, it contains information about the
-     * format of the records.
-     * @see #perform()
-     */
     public void setMetaInfo(MetaInfo metaInfo) {
         this.metaInfo = metaInfo;
     }
 
-    /**
-     * Gets meta-information.
-     *
-     * @return the MetaInfo object.
-     */
     public MetaInfo getMetaInfo() {
         return metaInfo;
     }
 
-    /**
-     * Sets the verbose object containing the verbose level.
-     *
-     * @param verbose the Verbose object.
-     */
     public void setVerbose(Verbose verbose) {
         this.verbose = verbose;
     }
 
-    /**
-     * Determines what verbose level is wanted.
-     *
-     * @return the verbose object containing the verbose level
-     */
     public Verbose getVerbose() {
         return verbose;
     }
 
-    /**
-     * Sets the summary object containing all data for the summary.
-     *
-     * @param summary the Summary object.
-     */
     public void setSummary(Summary summary) {
         this.summary = summary;
         summary.setCheck(true);
     }
 
-    /**
-     * Get the Summary object.
-     *
-     * @return the Summary object containing all data for the summary
-     */
     public Summary getSummary() {
         return summary;
     }
 
-    /**
-     * Sets the list value.
-     *
-     * @param list the boolean state whether a list is wanted.
-     */
     public void setList(boolean list) {
         this._l = list;
     }
 
-    /**
-     * Determines whether a short list is wanted.
-     *
-     * @return the boolean state whether a list is wanted.
-     */
     public boolean isList() {
         return _l;
     }
@@ -168,18 +87,8 @@ public class CheckFile {
         return workingDir;
     }
 
-    /**
-     * Reads the file which has been specified at the constructor. The file is
-     * read and info about modifications are printed out. The output is
-     * controlled by the set methods of this class.
-     *
-     * @exception FileNotFoundException if file is not there
-     * @exception IOException during an IO error
-     * @exception MetaInfoVersionException if the MetaInfo version is
-     * incompatible
-     */
     public void perform() throws FileNotFoundException, IOException, MetaInfoVersionException, ExitException {
-        // read the checkFile line by line
+        
 
         FileInputStream fis = null;
         InputStreamReader isr = null;
@@ -192,22 +101,22 @@ public class CheckFile {
             br.mark(1024);
 
             String thisLine = null;
-            int ignoretokens = 2; // default: checksum and filesize
+            int ignoretokens = 2; 
             String filename = null;
 
             if ((thisLine = br.readLine()) != null) {
                 if (thisLine.startsWith(MetaInfo.METAINFO)
                         && !thisLine.startsWith(metaInfo.getCommentchars())) {
 
-                    // read the Meta Information from the file
+                    
                     metaInfo = new MetaInfo(thisLine);
 
                 } else {
                     if (verbose.getWarnings()) {
                         System.err.println("Jacksum: Warning: file does not contain meta information. Please set suitable command line parameters.");
                     }
-                    // let's use the current metaInfo
-                    // the first line wasn't a meta info line, so let's start reading from the beginning
+                    
+                    
                     br.reset();
                 }
             } else {
@@ -223,26 +132,26 @@ public class CheckFile {
             if (checksum instanceof MD
                     || checksum instanceof MDgnu
                     || checksum instanceof Edonkey) {
-                ignoretokens--; // no size value
+                ignoretokens--; 
             }
 
             if (checksum instanceof None
                     || checksum instanceof Read) {
-                ignoretokens--; // no checksum value
+                ignoretokens--; 
             }
 
             if (metaInfo.isSeparatorWanted()) {
                 CSEP = metaInfo.getSeparator();
                 checksum.setSeparator(CSEP);
-            } else { // otherwise, we use the default separator which dependent on the algorithm
+            } else { 
                 CSEP = checksum.getSeparator();
             }
 
-            // is there a timeformat?
+            
             if (metaInfo.isTimestampFormat()) {
                 ignoretokens++;
                 checksum.setTimestampFormat(metaInfo.getTimestampFormat());
-                // if CSEP is part of tformat, increase ignoretokens (count CSEPs)
+                
                 String[] result = GeneralString.split(metaInfo.getTimestampFormat(), CSEP);
                 ignoretokens += result.length - 1;
             } else {
@@ -266,28 +175,28 @@ public class CheckFile {
                 }
             }
 
-            // find out the length of the checksum output
-            // skip the checksum token if length is predictable
+            
+            
             int skipchecksumlen = 0;
-            if ((checksum.getEncoding().length() == 0) || // it's decimal => actual the length is unpredictable
-                    (checksum.getEncoding().equalsIgnoreCase(AbstractChecksum.DEC)) || // decimal
-                    (checksum.getEncoding().equalsIgnoreCase(AbstractChecksum.OCT)) || // octal
-                    (checksum instanceof None || checksum instanceof Read) // no checksum
+            if ((checksum.getEncoding().length() == 0) || 
+                    (checksum.getEncoding().equalsIgnoreCase(AbstractChecksum.DEC)) || 
+                    (checksum.getEncoding().equalsIgnoreCase(AbstractChecksum.OCT)) || 
+                    (checksum instanceof None || checksum instanceof Read) 
                     ) {
                 skipchecksumlen = 0;
             } else {
                 skipchecksumlen = checksum.getFormattedValue().length();
-                ignoretokens--; // we ignore the checksum by it's length and not by the token
+                ignoretokens--; 
             }
 
-            // process the check file
+            
             String folder = "";
             boolean lastLineWasEmptyLine = true;
             while ((thisLine = br.readLine()) != null) {
-                if ((!thisLine.startsWith(COMMENTDEFAULT)) && // ignore Jacksum default comment lines
-                        (!thisLine.startsWith(metaInfo.getCommentchars())) // ignore customized comment lines
+                if ((!thisLine.startsWith(COMMENTDEFAULT)) && 
+                        (!thisLine.startsWith(metaInfo.getCommentchars())) 
                         ) {
-                    if (thisLine.length() == 0) { // ignore empty lines
+                    if (thisLine.length() == 0) { 
                         lastLineWasEmptyLine = true;
                         continue;
                     }
@@ -300,7 +209,7 @@ public class CheckFile {
                         if (lastLineWasEmptyLine
                                 && metaInfo.isRecursive()
                                 && !metaInfo.isPathInfo()
-                                && thisLine.endsWith(":")) { // it is a folder
+                                && thisLine.endsWith(":")) { 
                             lastLineWasEmptyLine = false;
                             folder = thisLine.substring(0, thisLine.length() - 1);
 
@@ -318,7 +227,7 @@ public class CheckFile {
                             if (folder.length() > 0) {
                                 folder += File.separator;
                             }
-                        } else { // it is a record
+                        } else { 
                             try {
                                 filename = parseFilename(thisLine, ignoretokens, skipchecksumlen);
                                 int skip = filename.length();
@@ -354,15 +263,15 @@ public class CheckFile {
                             }
                         }
                     }
-                } // if
+                } 
 
-            } // while
+            } 
 
         } finally {
-            // save the statistics
+            
             summary.setRemovedFiles(removed);
             summary.setModifiedFiles(modified);
-            // release file descriptors
+            
             if (br != null) {
                 br.close();
             }
@@ -413,15 +322,15 @@ public class CheckFile {
 
     private String parseFilename(String thisLine, int ignoretokens, int skipchecksumlen)
             throws NoSuchElementException {
-        // get the filename from thisLine
+        
         if (skipchecksumlen > 0) {
             thisLine = thisLine.substring(skipchecksumlen + CSEP.length());
         }
 
         StringBuffer buf = new StringBuffer();
         String[] result = GeneralString.split(thisLine, CSEP);
-        //String filename=result[ignoretokens];
-        buf.append(result[ignoretokens]); // filename
+        
+        buf.append(result[ignoretokens]); 
         for (int i = ignoretokens + 1; i < result.length; i++) {
             buf.append(CSEP);
             buf.append(result[i]);
@@ -429,12 +338,6 @@ public class CheckFile {
         return buf.toString();
     }
 
-    /**
-     * get a formatted checksum line
-     *
-     * @return a full formatted checksum line
-     * @param filename process this file
-     */
     private String getChecksumOutput(String filename) throws IOException {
         summary.addBytes(checksum.readFile(filename, true));
 
@@ -444,7 +347,7 @@ public class CheckFile {
         } else {
             checksum.setFilename(filename);
         }
-        //return  (_F ? checksum.format(format) : checksum.toString());
+        
         return checksum.toString();
     }
 

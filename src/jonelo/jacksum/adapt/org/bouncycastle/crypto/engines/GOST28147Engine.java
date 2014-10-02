@@ -8,9 +8,6 @@ import jonelo.jacksum.adapt.org.bouncycastle.crypto.DataLengthException;
 import jonelo.jacksum.adapt.org.bouncycastle.crypto.params.KeyParameter;
 import jonelo.jacksum.adapt.org.bouncycastle.crypto.params.ParametersWithSBox;
 
-/**
- * implementation of GOST 28147-89
- */
 public class GOST28147Engine
         implements BlockCipher {
 
@@ -18,8 +15,8 @@ public class GOST28147Engine
     private int[] workingKey = null;
     private boolean forEncryption;
 
-    // these are the S-boxes given in Applied Cryptography 2nd Ed., p. 333
-    // This is default S-box!
+    
+    
     private byte S[] = {
         0x4, 0xA, 0x9, 0x2, 0xD, 0x8, 0x0, 0xE, 0x6, 0xB, 0x1, 0xC, 0x7, 0xF, 0x5, 0x3,
         0xE, 0xB, 0x4, 0xC, 0x6, 0xD, 0xF, 0xA, 0x2, 0x3, 0x8, 0x1, 0x0, 0x7, 0x5, 0x9,
@@ -31,11 +28,6 @@ public class GOST28147Engine
         0x1, 0xF, 0xD, 0x0, 0x5, 0x7, 0xA, 0x4, 0x9, 0x2, 0x3, 0xE, 0x6, 0xB, 0x8, 0xC
     };
 
-    /*
-     * class content S-box parameters for encrypting
-     * getting from, see: http://www.ietf.org/internet-drafts/draft-popov-cryptopro-cpalgs-01.txt
-     *                    http://www.ietf.org/internet-drafts/draft-popov-cryptopro-cpalgs-02.txt
-     */
     private static byte[] ESbox_Test = {
         0x4, 0x2, 0xF, 0x5, 0x9, 0x1, 0x0, 0x8, 0xE, 0x3, 0xB, 0xC, 0xD, 0x7, 0xA, 0x6,
         0xC, 0x9, 0xF, 0xE, 0x8, 0x1, 0x3, 0xA, 0x2, 0x7, 0x4, 0xD, 0x6, 0x0, 0xB, 0x5,
@@ -91,7 +83,7 @@ public class GOST28147Engine
         0x1, 0xA, 0x6, 0x8, 0xF, 0xB, 0x0, 0x4, 0xC, 0x3, 0x5, 0x9, 0x7, 0xD, 0x2, 0xE
     };
 
-    //S-box for digest
+    
     private static byte DSbox_Test[] = {
         0x4, 0xA, 0x9, 0x2, 0xD, 0x8, 0x0, 0xE, 0x6, 0xB, 0x1, 0xC, 0x7, 0xF, 0x5, 0x3,
         0xE, 0xB, 0x4, 0xC, 0x6, 0xD, 0xF, 0xA, 0x2, 0x3, 0x8, 0x1, 0x0, 0x7, 0x5, 0x9,
@@ -114,9 +106,9 @@ public class GOST28147Engine
         0x1, 0x3, 0xA, 0x9, 0x5, 0xB, 0x4, 0xF, 0x8, 0x6, 0x7, 0xE, 0xD, 0x0, 0x2, 0xC
     };
 
-    //
-    // pre-defined sbox table
-    //
+    
+    
+    
     private static Hashtable sBoxes = new Hashtable();
 
     static {
@@ -129,34 +121,23 @@ public class GOST28147Engine
         sBoxes.put("D-A", DSbox_A);
     }
 
-    /**
-     * standard constructor.
-     */
     public GOST28147Engine() {
     }
 
-    /**
-     * initialise an GOST28147 cipher.
-     *
-     * @param forEncryption whether or not we are for encryption.
-     * @param params the parameters required to set up the cipher.
-     * @exception IllegalArgumentException if the params argument is
-     * inappropriate.
-     */
     public void init(
             boolean forEncryption,
             CipherParameters params) {
         if (params instanceof ParametersWithSBox) {
             ParametersWithSBox param = (ParametersWithSBox) params;
 
-            //
-            // Set the S-Box
-            //
+            
+            
+            
             System.arraycopy(param.getSBox(), 0, this.S, 0, param.getSBox().length);
 
-            //
-            // set key if there is one
-            //
+            
+            
+            
             if (param.getParameters() != null) {
                 workingKey = generateWorkingKey(forEncryption,
                         ((KeyParameter) param.getParameters()).getKey());
@@ -224,9 +205,9 @@ public class GOST28147Engine
     }
 
     private int GOST28147_mainStep(int n1, int key) {
-        int cm = (key + n1); // CM1
+        int cm = (key + n1); 
 
-        // S-box replacing
+        
         int om = S[0 + ((cm >> (0 * 4)) & 0xF)] << (0 * 4);
         om += S[16 + ((cm >> (1 * 4)) & 0xF)] << (1 * 4);
         om += S[32 + ((cm >> (2 * 4)) & 0xF)] << (2 * 4);
@@ -236,7 +217,7 @@ public class GOST28147Engine
         om += S[96 + ((cm >> (6 * 4)) & 0xF)] << (6 * 4);
         om += S[112 + ((cm >> (7 * 4)) & 0xF)] << (7 * 4);
 
-        return om << 11 | om >>> (32 - 11); // 11-leftshift
+        return om << 11 | om >>> (32 - 11); 
     }
 
     private void GOST28147Func(
@@ -245,53 +226,53 @@ public class GOST28147Engine
             int inOff,
             byte[] out,
             int outOff) {
-        int N1, N2, tmp;  //tmp -> for saving N1
+        int N1, N2, tmp;  
         N1 = bytesToint(in, inOff);
         N2 = bytesToint(in, inOff + 4);
 
         if (this.forEncryption) {
-            for (int k = 0, j; k < 3; k++) // 1-24 steps
+            for (int k = 0, j; k < 3; k++) 
             {
                 for (j = 0; j < 8; j++) {
                     tmp = N1;
-                    N1 = N2 ^ GOST28147_mainStep(N1, workingKey[j]); // CM2
+                    N1 = N2 ^ GOST28147_mainStep(N1, workingKey[j]); 
                     N2 = tmp;
                 }
             }
-            for (int j = 7; j > 0; j--) // 25-31 steps
+            for (int j = 7; j > 0; j--) 
             {
                 tmp = N1;
-                N1 = N2 ^ GOST28147_mainStep(N1, workingKey[j]); // CM2
+                N1 = N2 ^ GOST28147_mainStep(N1, workingKey[j]); 
                 N2 = tmp;
             }
-        } else //decrypt
+        } else 
         {
-            for (int j = 0; j < 8; j++) // 1-8 steps
+            for (int j = 0; j < 8; j++) 
             {
                 tmp = N1;
-                N1 = N2 ^ GOST28147_mainStep(N1, workingKey[j]); // CM2
+                N1 = N2 ^ GOST28147_mainStep(N1, workingKey[j]); 
                 N2 = tmp;
             }
-            for (int k = 0, j; k < 3; k++) //9-31 steps
+            for (int k = 0, j; k < 3; k++) 
             {
                 for (j = 7; j >= 0; j--) {
                     if ((k == 2) && (j == 0)) {
-                        break; // break 32 step
+                        break; 
                     }
                     tmp = N1;
-                    N1 = N2 ^ GOST28147_mainStep(N1, workingKey[j]); // CM2
+                    N1 = N2 ^ GOST28147_mainStep(N1, workingKey[j]); 
                     N2 = tmp;
                 }
             }
         }
 
-        N2 = N2 ^ GOST28147_mainStep(N1, workingKey[0]);  // 32 step (N1=N1)
+        N2 = N2 ^ GOST28147_mainStep(N1, workingKey[0]);  
 
         intTobytes(N1, out, outOff);
         intTobytes(N2, out, outOff + 4);
     }
 
-    //array of bytes to type int
+    
     private int bytesToint(
             byte[] in,
             int inOff) {
@@ -299,7 +280,7 @@ public class GOST28147Engine
                 + ((in[inOff + 1] << 8) & 0xff00) + (in[inOff] & 0xff);
     }
 
-    //int to array of bytes
+    
     private void intTobytes(
             int num,
             byte[] out,
@@ -310,12 +291,6 @@ public class GOST28147Engine
         out[outOff] = (byte) num;
     }
 
-    /**
-     * Return the S-Box associated with SBoxName
-     *
-     * @param sBoxName name of the S-Box
-     * @return byte array representing the S-Box
-     */
     public static byte[] getSBox(
             String sBoxName) {
         byte[] namedSBox = (byte[]) sBoxes.get(sBoxName.toUpperCase());

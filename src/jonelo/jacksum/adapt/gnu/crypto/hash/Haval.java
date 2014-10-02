@@ -1,72 +1,10 @@
 package jonelo.jacksum.adapt.gnu.crypto.hash;
 
-// ----------------------------------------------------------------------------
-// $Id: Haval.java,v 1.2 2003/06/21 09:13:40 raif Exp $
-//
-// Copyright (C) 2003 Free Software Foundation, Inc.
-//
-// This file is part of GNU Crypto.
-//
-// GNU Crypto is free software; you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation; either version 2, or (at your option)
-// any later version.
-//
-// GNU Crypto is distributed in the hope that it will be useful, but
-// WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-// General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program; see the file COPYING.  If not, write to the
-//
-//    Free Software Foundation Inc.,
-//    59 Temple Place - Suite 330,
-//    Boston, MA 02111-1307
-//    USA
-//
-// Linking this library statically or dynamically with other modules is
-// making a combined work based on this library.  Thus, the terms and
-// conditions of the GNU General Public License cover the whole
-// combination.
-//
-// As a special exception, the copyright holders of this library give
-// you permission to link this library with independent modules to
-// produce an executable, regardless of the license terms of these
-// independent modules, and to copy and distribute the resulting
-// executable under terms of your choice, provided that you also meet,
-// for each linked independent module, the terms and conditions of the
-// license of that module.  An independent module is a module which is
-// not derived from or based on this library.  If you modify this
-// library, you may extend this exception to your version of the
-// library, but you are not obligated to do so.  If you do not wish to
-// do so, delete this exception statement from your version.
-// ----------------------------------------------------------------------------
 import jonelo.jacksum.adapt.gnu.crypto.Registry;
 import jonelo.jacksum.adapt.gnu.crypto.util.Util;
 
-/**
- * <p>
- * The <i>HAVAL</i> message-digest algorithm is a variable output length, with
- * variable number of rounds. By default, this implementation allows
- * <i>HAVAL</i> to be used as a drop-in replacement for <i>MD5</i>.</p>
- *
- * <p>
- * References:</p>
- *
- * <ol>
- * <li>HAVAL - A One-Way Hashing Algorithm with Variable Length of Output<br>
- * Advances in Cryptology - AUSCRYPT'92, Lecture Notes in Computer Science,<br>
- * Springer-Verlag, 1993; <br>
- * Y. Zheng, J. Pieprzyk and J. Seberry.</li>
- * </ol>
- *
- * @version $Revision: 1.2 $
- */
 public class Haval extends BaseHash {
 
-    // Constants and variables
-    // -------------------------------------------------------------------------
     public static final int HAVAL_VERSION = 1;
 
     public static final int HAVAL_128_BIT = 16;
@@ -79,77 +17,24 @@ public class Haval extends BaseHash {
     public static final int HAVAL_4_ROUND = 4;
     public static final int HAVAL_5_ROUND = 5;
 
-    private static final int BLOCK_SIZE = 128; // inner block size in bytes
+    private static final int BLOCK_SIZE = 128;
 
     private static final String DIGEST0 = "C68F39913F901F3DDF44C707357A7D70";
 
-    /**
-     * caches the result of the correctness test, once executed.
-     */
     private static Boolean valid;
 
-    /**
-     * Number of HAVAL rounds. Allowed values are integers in the range <code>3
-     * .. 5</code>. The default is <code>3</code>.
-     */
     private int rounds = HAVAL_3_ROUND;
 
-    /**
-     * 128-bit interim result.
-     */
     private int h0, h1, h2, h3, h4, h5, h6, h7;
 
-    // Constructor(s)
-    // -------------------------------------------------------------------------
-    /**
-     * <p>
-     * Calls the constructor with two argument using {@link #HAVAL_128_BIT} as
-     * the value for the output size (i.e. <code>128</code> bits, and
-     * {@link #HAVAL_3_ROUND} for the value of number of rounds.</p>
-     */
     public Haval() {
         this(HAVAL_128_BIT, HAVAL_3_ROUND);
     }
 
-    /**
-     * <p>
-     * Calls the constructor with two arguments using the designated output
-     * size, and {@link #HAVAL_3_ROUND} for the value of number of rounds.</p>
-     *
-     * @param size the output size in bytes of this instance.
-     * @throws IllegalArgumentException if the designated output size is
-     * invalid.
-     * @see #HAVAL_128_BIT
-     * @see #HAVAL_160_BIT
-     * @see #HAVAL_192_BIT
-     * @see #HAVAL_224_BIT
-     * @see #HAVAL_256_BIT
-     */
     public Haval(int size) {
         this(size, HAVAL_3_ROUND);
     }
 
-    /**
-     * <p>
-     * Constructs a <code>Haval</code> instance with the designated output size
-     * (in bytes). Valid output <code>size</code> values are <code>16</code>,
-     * <code>20</code>, <code>24</code>, <code>28</code> and <code>32</code>.
-     * Valid values for <code>rounds</code> are in the range <code>3..5</code>
-     * inclusive.</p>
-     *
-     * @param size the output size in bytes of this instance.
-     * @param rounds the number of rounds to apply when transforming data.
-     * @throws IllegalArgumentException if the designated output size is
-     * invalid, or if the number of rounds is invalid.
-     * @see #HAVAL_128_BIT
-     * @see #HAVAL_160_BIT
-     * @see #HAVAL_192_BIT
-     * @see #HAVAL_224_BIT
-     * @see #HAVAL_256_BIT
-     * @see #HAVAL_3_ROUND
-     * @see #HAVAL_4_ROUND
-     * @see #HAVAL_5_ROUND
-     */
     public Haval(int size, int rounds) {
         super(Registry.HAVAL_HASH, size, BLOCK_SIZE);
 
@@ -168,12 +53,6 @@ public class Haval extends BaseHash {
         this.rounds = rounds;
     }
 
-    /**
-     * <p>
-     * Private constructor for cloning purposes.</p>
-     *
-     * @param md the instance to clone.
-     */
     private Haval(Haval md) {
         this(md.hashSize, md.rounds);
 
@@ -189,18 +68,10 @@ public class Haval extends BaseHash {
         this.buffer = (byte[]) md.buffer.clone();
     }
 
-   // Constructor(s)
-    // -------------------------------------------------------------------------
-    // Class methods
-    // -------------------------------------------------------------------------
-    // Instance methods
-    // -------------------------------------------------------------------------
-    // java.lang.Cloneable interface implementation ----------------------------
     public Object clone() {
         return new Haval(this);
     }
 
-    // Implementation of concrete methods in BaseHash --------------------------
     protected synchronized void transform(byte[] in, int i) {
         int X0 = (in[i++] & 0xFF) | (in[i++] & 0xFF) << 8 | (in[i++] & 0xFF) << 16 | (in[i++] & 0xFF) << 24;
         int X1 = (in[i++] & 0xFF) | (in[i++] & 0xFF) << 8 | (in[i++] & 0xFF) << 16 | (in[i++] & 0xFF) << 24;
@@ -237,7 +108,6 @@ public class Haval extends BaseHash {
 
         int t0 = h0, t1 = h1, t2 = h2, t3 = h3, t4 = h4, t5 = h5, t6 = h6, t7 = h7;
 
-        // Pass 1
         t7 = FF1(t7, t6, t5, t4, t3, t2, t1, t0, X0);
         t6 = FF1(t6, t5, t4, t3, t2, t1, t0, t7, X1);
         t5 = FF1(t5, t4, t3, t2, t1, t0, t7, t6, X2);
@@ -274,7 +144,6 @@ public class Haval extends BaseHash {
         t1 = FF1(t1, t0, t7, t6, t5, t4, t3, t2, X30);
         t0 = FF1(t0, t7, t6, t5, t4, t3, t2, t1, X31);
 
-        // Pass 2
         t7 = FF2(t7, t6, t5, t4, t3, t2, t1, t0, X5, 0x452821E6);
         t6 = FF2(t6, t5, t4, t3, t2, t1, t0, t7, X14, 0x38D01377);
         t5 = FF2(t5, t4, t3, t2, t1, t0, t7, t6, X26, 0xBE5466CF);
@@ -311,7 +180,6 @@ public class Haval extends BaseHash {
         t1 = FF2(t1, t0, t7, t6, t5, t4, t3, t2, X31, 0x7B54A41D);
         t0 = FF2(t0, t7, t6, t5, t4, t3, t2, t1, X27, 0xC25A59B5);
 
-        // Pass 3
         t7 = FF3(t7, t6, t5, t4, t3, t2, t1, t0, X19, 0x9C30D539);
         t6 = FF3(t6, t5, t4, t3, t2, t1, t0, t7, X9, 0x2AF26013);
         t5 = FF3(t5, t4, t3, t2, t1, t0, t7, t6, X4, 0xC5D1B023);
@@ -433,20 +301,16 @@ public class Haval extends BaseHash {
     }
 
     protected byte[] padBuffer() {
-        // pad out to 118 mod 128.  other 10 bytes have special use.
+
         int n = (int) (count % BLOCK_SIZE);
         int padding = (n < 118) ? (118 - n) : (246 - n);
         byte[] result = new byte[padding + 10];
         result[0] = (byte) 0x01;
 
-        // save the version number (LSB 3), the number of rounds (3 bits in the
-        // middle), the fingerprint length (MSB 2 bits and next byte) and the
-        // number of bits in the unpadded message.
         int bl = hashSize * 8;
         result[padding++] = (byte) (((bl & 0x03) << 6) | ((rounds & 0x07) << 3) | (HAVAL_VERSION & 0x07));
         result[padding++] = (byte) (bl >>> 2);
 
-        // save number of bits, casting the long to an array of 8 bytes
         long bits = count << 3;
         result[padding++] = (byte) bits;
         result[padding++] = (byte) (bits >>> 8);
@@ -461,8 +325,8 @@ public class Haval extends BaseHash {
     }
 
     protected byte[] getResult() {
-        tailorDigestBits(); // tailor context for the designated output size
-        // cast enough top context values into an array of hashSize bytes
+        tailorDigestBits();
+
         byte[] result = new byte[hashSize];
         if (hashSize >= HAVAL_256_BIT) {
             result[31] = (byte) (h7 >>> 24);
@@ -526,10 +390,6 @@ public class Haval extends BaseHash {
         return valid.booleanValue();
     }
 
-    // helper methods ----------------------------------------------------------
-    /**
-     * Tailors the last output.
-     */
     private void tailorDigestBits() {
         int t;
         switch (hashSize) {
@@ -580,20 +440,6 @@ public class Haval extends BaseHash {
         }
     }
 
-    /**
-     * Permutations phi_{i,j}, i=3,4,5, j=1,...,i.
-     *
-     * rounds = 3: 6 5 4 3 2 1 0 | | | | | | | (replaced by) phi_{3,1}: 1 0 3 5
-     * 6 2 4 phi_{3,2}: 4 2 1 0 5 3 6 phi_{3,3}: 6 1 2 3 4 5 0
-     *
-     * rounds = 4: 6 5 4 3 2 1 0 | | | | | | | (replaced by) phi_{4,1}: 2 6 1 4
-     * 5 3 0 phi_{4,2}: 3 5 2 0 1 6 4 phi_{4,3}: 1 4 3 6 0 2 5 phi_{4,4}: 6 4 0
-     * 5 2 1 3
-     *
-     * rounds = 5: 6 5 4 3 2 1 0 | | | | | | | (replaced by) phi_{5,1}: 3 4 1 0
-     * 5 2 6 phi_{5,2}: 6 2 1 0 3 4 5 phi_{5,3}: 2 6 0 4 3 1 5 phi_{5,4}: 1 5 3
-     * 2 0 4 6 phi_{5,5}: 2 5 0 6 4 3 1
-     */
     private int
             FF1(int x7, int x6, int x5, int x4, int x3, int x2, int x1, int x0, int w) {
         int t;

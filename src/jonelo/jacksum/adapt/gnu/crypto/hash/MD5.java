@@ -1,102 +1,68 @@
 package jonelo.jacksum.adapt.gnu.crypto.hash;
 
-// ----------------------------------------------------------------------------
-// $Id: MD5.java,v 1.6 2002/12/07 10:05:38 raif Exp $
-//
-// Copyright (C) 2001, 2002, Free Software Foundation, Inc.
-//
-// This file is part of GNU Crypto.
-//
-// GNU Crypto is free software; you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation; either version 2, or (at your option)
-// any later version.
-//
-// GNU Crypto is distributed in the hope that it will be useful, but
-// WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-// General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program; see the file COPYING.  If not, write to the
-//
-//    Free Software Foundation Inc.,
-//    59 Temple Place - Suite 330,
-//    Boston, MA 02111-1307
-//    USA
-//
-// Linking this library statically or dynamically with other modules is
-// making a combined work based on this library.  Thus, the terms and
-// conditions of the GNU General Public License cover the whole
-// combination.
-//
-// As a special exception, the copyright holders of this library give
-// you permission to link this library with independent modules to
-// produce an executable, regardless of the license terms of these
-// independent modules, and to copy and distribute the resulting
-// executable under terms of your choice, provided that you also meet,
-// for each linked independent module, the terms and conditions of the
-// license of that module.  An independent module is a module which is
-// not derived from or based on this library.  If you modify this
-// library, you may extend this exception to your version of the
-// library, but you are not obligated to do so.  If you do not wish to
-// do so, delete this exception statement from your version.
-// ----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 import jonelo.jacksum.adapt.gnu.crypto.Registry;
 import jonelo.jacksum.adapt.gnu.crypto.util.Util;
 
-/**
- * <p>
- * The MD5 message-digest algorithm takes as input a message of arbitrary length
- * and produces as output a 128-bit "fingerprint" or "message digest" of the
- * input. It is conjectured that it is computationally infeasible to produce two
- * messages having the same message digest, or to produce any message having a
- * given prespecified target message digest.</p>
- *
- * <p>
- * References:</p>
- *
- * <ol>
- * <li>The <a href="http://www.ietf.org/rfc/rfc1321.txt">MD5</a> Message- Digest
- * Algorithm.<br>
- * R. Rivest.</li>
- * </ol>
- *
- * @version $Revision: 1.6 $
- */
 public class MD5 extends BaseHash {
 
-    // Constants and variables
-    // -------------------------------------------------------------------------
-    private static final int BLOCK_SIZE = 64; // inner block size in bytes
+    
+    
+    private static final int BLOCK_SIZE = 64; 
 
     private static final String DIGEST0 = "D41D8CD98F00B204E9800998ECF8427E";
 
-    /**
-     * caches the result of the correctness test, once executed.
-     */
     private static Boolean valid;
 
-    /**
-     * 128-bit interim result.
-     */
     private int h0, h1, h2, h3;
 
-    // Constructor(s)
-    // -------------------------------------------------------------------------
-    /**
-     * Trivial 0-arguments constructor.
-     */
+    
+    
     public MD5() {
         super(Registry.MD5_HASH, 16, BLOCK_SIZE);
     }
 
-    /**
-     * <p>
-     * Private constructor for cloning purposes.</p>
-     *
-     * @param md the instance to clone.
-     */
     private MD5(MD5 md) {
         this();
 
@@ -108,16 +74,16 @@ public class MD5 extends BaseHash {
         this.buffer = (byte[]) md.buffer.clone();
     }
 
-   // Class methods
-    // -------------------------------------------------------------------------
-    // Instance methods
-    // -------------------------------------------------------------------------
-    // java.lang.Cloneable interface implementation ----------------------------
+    
+    
+    
+    
+    
     public Object clone() {
         return new MD5(this);
     }
 
-    // Implementation of concrete methods in BaseHash --------------------------
+    
     protected synchronized void transform(byte[] in, int i) {
         int X0 = (in[i++] & 0xFF) | (in[i++] & 0xFF) << 8 | (in[i++] & 0xFF) << 16 | in[i++] << 24;
         int X1 = (in[i++] & 0xFF) | (in[i++] & 0xFF) << 8 | (in[i++] & 0xFF) << 16 | in[i++] << 24;
@@ -141,8 +107,8 @@ public class MD5 extends BaseHash {
         int C = h2;
         int D = h3;
 
-        // hex constants are from md5.c in FSF Gnu Privacy Guard 0.9.2
-        // round 1
+        
+        
         A += ((B & C) | (~B & D)) + X0 + 0xD76AA478;
         A = B + (A << 7 | A >>> -7);
         D += ((A & B) | (~A & C)) + X1 + 0xE8C7B756;
@@ -179,7 +145,7 @@ public class MD5 extends BaseHash {
         B += ((C & D) | (~C & A)) + X15 + 0x49B40821;
         B = C + (B << 22 | B >>> -22);
 
-        // round 2
+        
         A += ((B & D) | (C & ~D)) + X1 + 0xF61E2562;
         A = B + (A << 5 | A >>> -5);
         D += ((A & C) | (B & ~C)) + X6 + 0xC040B340;
@@ -216,7 +182,7 @@ public class MD5 extends BaseHash {
         B += ((C & A) | (D & ~A)) + X12 + 0x8D2A4C8A;
         B = C + (B << 20 | B >>> -20);
 
-        // round 3
+        
         A += (B ^ C ^ D) + X5 + 0xFFFA3942;
         A = B + (A << 4 | A >>> -4);
         D += (A ^ B ^ C) + X8 + 0x8771F681;
@@ -253,7 +219,7 @@ public class MD5 extends BaseHash {
         B += (C ^ D ^ A) + X2 + 0xC4AC5665;
         B = C + (B << 23 | B >>> -23);
 
-        // round 4
+        
         A += (C ^ (B | ~D)) + X0 + 0xF4292244;
         A = B + (A << 6 | A >>> -6);
         D += (B ^ (A | ~C)) + X7 + 0x432AFF97;
@@ -301,10 +267,10 @@ public class MD5 extends BaseHash {
         int padding = (n < 56) ? (56 - n) : (120 - n);
         byte[] result = new byte[padding + 8];
 
-        // padding is always binary 1 followed by binary 0s
+        
         result[0] = (byte) 0x80;
 
-        // save number of bits, casting the long to an array of 8 bytes
+        
         long bits = count << 3;
         result[padding++] = (byte) bits;
         result[padding++] = (byte) (bits >>> 8);
@@ -330,7 +296,7 @@ public class MD5 extends BaseHash {
     }
 
     protected void resetContext() {
-        // magic MD5/RIPEMD128 initialisation constants
+        
         h0 = 0x67452301;
         h1 = 0xEFCDAB89;
         h2 = 0x98BADCFE;

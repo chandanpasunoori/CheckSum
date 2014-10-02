@@ -1,55 +1,30 @@
 package jonelo.jacksum.adapt.gnu.crypto.hash;
 
-// ----------------------------------------------------------------------------
-// This file is not part of GNU Crypto
-//
-// Tiger2 has been derived from the Tiger class in GNU Crypto,
-// and has been developed by jonelo.
-// ----------------------------------------------------------------------------
-// http://www.cs.technion.ac.il/~biham/Reports/Tiger/tiger2-test-vectors-nessie-format.dat
-// http://www.prevalent.de/index.pl?site=2&subsite=5&fileid=9009
+
+
+
+
+
+
+
+
 import jonelo.jacksum.adapt.gnu.crypto.Registry;
 import jonelo.jacksum.adapt.gnu.crypto.util.Util;
 
-/**
- * The Tiger2 message digest. Tiger2 was designed by Ross Anderson and Eli
- * Biham, with the goal of producing a secure, fast hash function that performs
- * especially well on next-generation 64-bit architectures, but is still
- * efficient on 32- and 16-bit architectures.
- *
- * <p>
- * Tiger2 processes data in 512-bit blocks and produces a 192-bit digest.</p>
- *
- * <p>
- * References:</p>
- * <ol>
- * <li><a
- * href="http://www.cs.technion.ac.il/~biham/Reports/Tiger/">Tiger: A Fast New
- * Hash Function</a>, Ross Anderson and Eli Biham.</a></li>
- * </ol>
- *
- * @version $Revision: 1.1 $
- */
 public class Tiger2 extends BaseHash {
 
-    // Constants and variables.
-    // -----------------------------------------------------------------------
+    
+    
     private static final int HASH_SIZE = 24;
 
     private static final int BLOCK_SIZE = 64;
 
-    /**
-     * Result when no data has been input.
-     */
     private static final String DIGEST0 = "4441BE75F6018773C206C22745374B924AA8313FEF919F41";
 
     private static final long A = 0x0123456789ABCDEFL;
     private static final long B = 0xFEDCBA9876543210L;
     private static final long C = 0xF096A5B4C3B2E187L;
 
-    /**
-     * S-Box T1.
-     */
     private static final long[] T1 = {
         0x02AAB17CF7E90C5EL, 0xAC424B03E243A8ECL, 0x72CD5BE30DD5FCD3L, 0x6D019B93F6F97F3AL,
         0xCD9978FFD21F9193L, 0x7573A1C9708029E2L, 0xB164326B922A83C3L, 0x46883EEE04915870L,
@@ -117,9 +92,6 @@ public class Tiger2 extends BaseHash {
         0xFFED95D8F1EA02A2L, 0xE72B3BD61464D43DL, 0xA6300F170BDC4820L, 0xEBC18760ED78A77AL
     };
 
-    /**
-     * S-Box T2.
-     */
     private static final long[] T2 = {
         0xE6A6BE5A05A12138L, 0xB5A122A5B4F87C98L, 0x563C6089140B6990L, 0x4C46CB2E391F5DD5L,
         0xD932ADDBC9B79434L, 0x08EA70E42015AFF5L, 0xD765A6673E478CF1L, 0xC4FB757EAB278D99L,
@@ -187,9 +159,6 @@ public class Tiger2 extends BaseHash {
         0x9010A91E84711AE9L, 0x4DF7F0B7B1498371L, 0xD62A2EABC0977179L, 0x22FAC097AA8D5C0EL
     };
 
-    /**
-     * S-Box T3.
-     */
     private static final long[] T3 = {
         0xF49FCC2FF1DAF39BL, 0x487FD5C66FF29281L, 0xE8A30667FCDCA83FL, 0x2C9B4BE3D2FCCE63L,
         0xDA3FF74B93FBBBC2L, 0x2FA165D2FE70BA66L, 0xA103E279970E93D4L, 0xBECDEC77B0E45E71L,
@@ -257,9 +226,6 @@ public class Tiger2 extends BaseHash {
         0x454C6FE9F2C0C1CDL, 0x419CF6496412691CL, 0xD3DC3BEF265B0F70L, 0x6D0E60F5C3578A9EL
     };
 
-    /**
-     * S-Box T4.
-     */
     private static final long[] T4 = {
         0x5B0E608526323C55L, 0x1A46C1A9FA1B59F5L, 0xA9E245A17C4C8FFAL, 0x65CA5159DB2955D7L,
         0x05DB0A76CE35AFC2L, 0x81EAC77EA9113D45L, 0x528EF88AB6AC0A0DL, 0xA09EA253597BE3FFL,
@@ -327,26 +293,18 @@ public class Tiger2 extends BaseHash {
         0xCD56D9430EA8280EL, 0xC12591D7535F5065L, 0xC83223F1720AEF96L, 0xC3A0396F7363A51FL
     };
 
-    // The cached self-test result.
+    
     private static Boolean valid;
 
-    // The context.
+    
     private long a, b, c;
 
-    // Constructors.
-    // -----------------------------------------------------------------------
-    /**
-     * Trivial 0-arguments constructor.
-     */
+    
+    
     public Tiger2() {
         super(Registry.TIGER2_HASH, HASH_SIZE, BLOCK_SIZE);
     }
 
-    /**
-     * Private copying constructor for cloning.
-     *
-     * @param that The instance being cloned.
-     */
     private Tiger2(Tiger2 that) {
         this();
         this.a = that.a;
@@ -356,8 +314,8 @@ public class Tiger2 extends BaseHash {
         this.buffer = (that.buffer != null) ? (byte[]) that.buffer.clone() : null;
     }
 
-    // Instance methods implementing BaseHash.
-    // -----------------------------------------------------------------------
+    
+    
     public Object clone() {
         return new Tiger2(this);
     }
@@ -374,10 +332,10 @@ public class Tiger2 extends BaseHash {
         int padding = (n < 56) ? (56 - n) : (120 - n);
         byte[] result = new byte[padding + 8];
 
-        // padding is always binary 1 followed by binary 0s
+        
         result[0] = (byte) 0x80;
 
-        // save number of bits, casting the long to an array of 8 bytes
+        
         long bits = count << 3;
         result[padding++] = (byte) bits;
         result[padding++] = (byte) (bits >>> 8);
@@ -447,10 +405,10 @@ public class Tiger2 extends BaseHash {
                 | ((long) (in[offset++] & 0xFF) << 32) | ((long) (in[offset++] & 0xFF) << 40)
                 | ((long) (in[offset++] & 0xFF) << 48) | ((long) (in[offset] & 0xFF) << 56);
 
-        // save_abc ::=
+        
         long aa = a, bb = b, cc = c;
 
-        // pass(aa, bb, cc, 5) ::=
+        
         cc ^= x0;
         aa -= T1[(int) cc & 0xff] ^ T2[(int) (cc >> 16) & 0xff]
                 ^ T3[(int) (cc >> 32) & 0xff] ^ T4[(int) (cc >> 48) & 0xff];
@@ -500,7 +458,7 @@ public class Tiger2 extends BaseHash {
                 ^ T2[(int) (aa >> 40) & 0xff] ^ T1[(int) (aa >> 56) & 0xff];
         cc *= 5;
 
-        // key_schedule ::=
+        
         x0 -= x7 ^ 0xA5A5A5A5A5A5A5A5L;
         x1 ^= x0;
         x2 += x1;
@@ -518,7 +476,7 @@ public class Tiger2 extends BaseHash {
         x6 += x5;
         x7 -= x6 ^ 0x0123456789ABCDEFL;
 
-        // pass(cc, aa, bb, 7) ::=
+        
         bb ^= x0;
         cc -= T1[(int) bb & 0xff] ^ T2[(int) (bb >> 16) & 0xff]
                 ^ T3[(int) (bb >> 32) & 0xff] ^ T4[(int) (bb >> 48) & 0xff];
@@ -568,7 +526,7 @@ public class Tiger2 extends BaseHash {
                 ^ T2[(int) (cc >> 40) & 0xff] ^ T1[(int) (cc >> 56) & 0xff];
         bb *= 7;
 
-        // key_schedule ::=
+        
         x0 -= x7 ^ 0xA5A5A5A5A5A5A5A5L;
         x1 ^= x0;
         x2 += x1;
@@ -586,7 +544,7 @@ public class Tiger2 extends BaseHash {
         x6 += x5;
         x7 -= x6 ^ 0x0123456789ABCDEFL;
 
-        // pass(bb,cc,aa,9) ::=
+        
         aa ^= x0;
         bb -= T1[(int) aa & 0xff] ^ T2[(int) (aa >> 16) & 0xff]
                 ^ T3[(int) (aa >> 32) & 0xff] ^ T4[(int) (aa >> 48) & 0xff];
@@ -636,7 +594,7 @@ public class Tiger2 extends BaseHash {
                 ^ T2[(int) (bb >> 40) & 0xff] ^ T1[(int) (bb >> 56) & 0xff];
         aa *= 9;
 
-        // feedforward ::=
+        
         a ^= aa;
         b = bb - b;
         c += cc;

@@ -1,28 +1,3 @@
-/**
- * ****************************************************************************
- *
- * Jacksum version 1.7.0 - checksum utility in Java Copyright (C) 2001-2006
- * Dipl.-Inf. (FH) Johann Nepomuk Loefflmann, All Rights Reserved,
- * http://www.jonelo.de
- *
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
- * Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- * E-mail: jonelo@jonelo.de
- *
- ****************************************************************************
- */
 package jonelo.jacksum.util;
 
 import java.io.File;
@@ -73,9 +48,9 @@ public class Service {
     }
 
     private static StringBuffer insertBlanks(StringBuffer sb, int group, char groupChar) {
-        int bytecount = sb.length() / 2; // we expect a hex string
+        int bytecount = sb.length() / 2; 
         if (bytecount <= group) {
-            return sb; // avoid unnecessary action
+            return sb; 
         }
         StringBuffer sb2 = new StringBuffer(sb.length() + (bytecount / group - 1));
         int group2 = group * 2;
@@ -113,7 +88,7 @@ public class Service {
         }
         StringBuffer sb = new StringBuffer(bytes.length);
         BigInteger big = new BigInteger(1, bytes);
-        sb.append(big.toString(2)); // dual
+        sb.append(big.toString(2)); 
         while (sb.length() < (bytes.length * 8)) {
             sb.insert(0, '0');
         }
@@ -125,8 +100,8 @@ public class Service {
     }
 
     public static boolean isSymbolicLink(File file) {
-        // there are no symbolic links on Windows
-        // on Windows a link is always a file
+        
+        
         if (System.getProperty("os.name").toLowerCase().startsWith("windows")) {
             return false;
         }
@@ -145,23 +120,10 @@ public class Service {
         }
     }
 
-    /**
-     * Method transfers a long to 8 bytes and fills the array given in argument
-     *
-     * @param i a long value
-     * @param b the byte array
-     */
     public static void setLongInByteArray(long i, byte[] b) throws IndexOutOfBoundsException {
         setLongInByteArray(i, b, 0);
     }
 
-    /**
-     * Method transfers a long to 8 bytes and fills the array given in argument
-     *
-     * @param i a long value
-     * @param b the byte array
-     * @param index the index in the array
-     */
     public static void setLongInByteArray(long i, byte[] b, int index) throws IndexOutOfBoundsException {
         byte[] b1 = new byte[8];
         long i1;
@@ -179,13 +141,6 @@ public class Service {
         setIntInByteArray(i, b, 0);
     }
 
-    /**
-     * Method transforms an int to 4 bytes and fills the array given in argument
-     *
-     * @param i a int value
-     * @param b the byte array
-     * @param index the index in the array
-     */
     public static void setIntInByteArray(int i, byte[] b, int index) throws IndexOutOfBoundsException {
 
         byte[] b1 = new byte[4];
@@ -201,12 +156,6 @@ public class Service {
         }
     }
 
-    /**
-     * Return a human readable String which represents a time in ms
-     *
-     * @param t a time in ms
-     * @return a human readable representation of time as String
-     */
     public static final String duration(long t) {
         long ms = 0, s = 0, m = 0, h = 0, d = 0;
         ms = t % 1000;

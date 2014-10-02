@@ -1,32 +1,19 @@
 package jonelo.jacksum.adapt.org.bouncycastle.crypto.digests;
 
-/**
- * implementation of RIPEMD 320.
- * <p>
- * <b>Note:</b> this implementation offers the same level of security as RIPEMD
- * 160.
- */
 public class RIPEMD320Digest
         extends GeneralDigest {
 
     private static final int DIGEST_LENGTH = 40;
 
-    private int H0, H1, H2, H3, H4, H5, H6, H7, H8, H9; // IV's
+    private int H0, H1, H2, H3, H4, H5, H6, H7, H8, H9; 
 
     private int[] X = new int[16];
     private int xOff;
 
-    /**
-     * Standard constructor
-     */
     public RIPEMD320Digest() {
         reset();
     }
 
-    /**
-     * Copy constructor. This will copy the state of the provided message
-     * digest.
-     */
     public RIPEMD320Digest(RIPEMD320Digest t) {
         super(t);
 
@@ -105,9 +92,6 @@ public class RIPEMD320Digest
         return DIGEST_LENGTH;
     }
 
-    /**
-     * reset the chaining variables to the IV values.
-     */
     public void reset() {
         super.reset();
 
@@ -129,22 +113,12 @@ public class RIPEMD320Digest
         }
     }
 
-    /*
-     * rotate int x left n bits.
-     */
     private final int RL(
             int x,
             int n) {
         return (x << n) | (x >>> (32 - n));
     }
 
-    /*
-     * f1,f2,f3,f4,f5 are the basic RIPEMD160 functions.
-     */
-
-    /*
-     * rounds 0-15
-     */
     private final int f1(
             int x,
             int y,
@@ -152,9 +126,6 @@ public class RIPEMD320Digest
         return x ^ y ^ z;
     }
 
-    /*
-     * rounds 16-31
-     */
     private final int f2(
             int x,
             int y,
@@ -162,9 +133,6 @@ public class RIPEMD320Digest
         return (x & y) | (~x & z);
     }
 
-    /*
-     * rounds 32-47
-     */
     private final int f3(
             int x,
             int y,
@@ -172,9 +140,6 @@ public class RIPEMD320Digest
         return (x | ~y) ^ z;
     }
 
-    /*
-     * rounds 48-63
-     */
     private final int f4(
             int x,
             int y,
@@ -182,9 +147,6 @@ public class RIPEMD320Digest
         return (x & z) | (y & ~z);
     }
 
-    /*
-     * rounds 64-79
-     */
     private final int f5(
             int x,
             int y,
@@ -211,10 +173,10 @@ public class RIPEMD320Digest
         dd = H8;
         ee = H9;
 
-        //
-        // Rounds 1 - 16
-        //
-        // left
+        
+        
+        
+        
         a = RL(a + f1(b, c, d) + X[0], 11) + e;
         c = RL(c, 10);
         e = RL(e + f1(a, b, c) + X[1], 14) + d;
@@ -248,7 +210,7 @@ public class RIPEMD320Digest
         a = RL(a + f1(b, c, d) + X[15], 8) + e;
         c = RL(c, 10);
 
-        // right
+        
         aa = RL(aa + f5(bb, cc, dd) + X[5] + 0x50a28be6, 8) + ee;
         cc = RL(cc, 10);
         ee = RL(ee + f5(aa, bb, cc) + X[14] + 0x50a28be6, 9) + dd;
@@ -286,10 +248,10 @@ public class RIPEMD320Digest
         a = aa;
         aa = t;
 
-        //
-        // Rounds 16-31
-        //
-        // left
+        
+        
+        
+        
         e = RL(e + f2(a, b, c) + X[7] + 0x5a827999, 7) + d;
         b = RL(b, 10);
         d = RL(d + f2(e, a, b) + X[4] + 0x5a827999, 6) + c;
@@ -323,7 +285,7 @@ public class RIPEMD320Digest
         e = RL(e + f2(a, b, c) + X[8] + 0x5a827999, 12) + d;
         b = RL(b, 10);
 
-        // right
+        
         ee = RL(ee + f4(aa, bb, cc) + X[6] + 0x5c4dd124, 9) + dd;
         bb = RL(bb, 10);
         dd = RL(dd + f4(ee, aa, bb) + X[11] + 0x5c4dd124, 13) + cc;
@@ -361,10 +323,10 @@ public class RIPEMD320Digest
         b = bb;
         bb = t;
 
-        //
-        // Rounds 32-47
-        //
-        // left
+        
+        
+        
+        
         d = RL(d + f3(e, a, b) + X[3] + 0x6ed9eba1, 11) + c;
         a = RL(a, 10);
         c = RL(c + f3(d, e, a) + X[10] + 0x6ed9eba1, 13) + b;
@@ -398,7 +360,7 @@ public class RIPEMD320Digest
         d = RL(d + f3(e, a, b) + X[12] + 0x6ed9eba1, 5) + c;
         a = RL(a, 10);
 
-        // right
+        
         dd = RL(dd + f3(ee, aa, bb) + X[15] + 0x6d703ef3, 9) + cc;
         aa = RL(aa, 10);
         cc = RL(cc + f3(dd, ee, aa) + X[5] + 0x6d703ef3, 7) + bb;
@@ -436,10 +398,10 @@ public class RIPEMD320Digest
         c = cc;
         cc = t;
 
-        //
-        // Rounds 48-63
-        //
-        // left
+        
+        
+        
+        
         c = RL(c + f4(d, e, a) + X[1] + 0x8f1bbcdc, 11) + b;
         e = RL(e, 10);
         b = RL(b + f4(c, d, e) + X[9] + 0x8f1bbcdc, 12) + a;
@@ -473,7 +435,7 @@ public class RIPEMD320Digest
         c = RL(c + f4(d, e, a) + X[2] + 0x8f1bbcdc, 12) + b;
         e = RL(e, 10);
 
-        // right
+        
         cc = RL(cc + f2(dd, ee, aa) + X[8] + 0x7a6d76e9, 15) + bb;
         ee = RL(ee, 10);
         bb = RL(bb + f2(cc, dd, ee) + X[6] + 0x7a6d76e9, 5) + aa;
@@ -511,10 +473,10 @@ public class RIPEMD320Digest
         d = dd;
         dd = t;
 
-        //
-        // Rounds 64-79
-        //
-        // left
+        
+        
+        
+        
         b = RL(b + f5(c, d, e) + X[4] + 0xa953fd4e, 9) + a;
         d = RL(d, 10);
         a = RL(a + f5(b, c, d) + X[0] + 0xa953fd4e, 15) + e;
@@ -548,7 +510,7 @@ public class RIPEMD320Digest
         b = RL(b + f5(c, d, e) + X[13] + 0xa953fd4e, 6) + a;
         d = RL(d, 10);
 
-        // right
+        
         bb = RL(bb + f1(cc, dd, ee) + X[12], 8) + aa;
         dd = RL(dd, 10);
         aa = RL(aa + f1(bb, cc, dd) + X[15], 5) + ee;
@@ -582,9 +544,9 @@ public class RIPEMD320Digest
         bb = RL(bb + f1(cc, dd, ee) + X[11], 11) + aa;
         dd = RL(dd, 10);
 
-        //
-        // do (e, ee) swap as part of assignment.
-        //
+        
+        
+        
         H0 += a;
         H1 += b;
         H2 += c;
@@ -596,9 +558,9 @@ public class RIPEMD320Digest
         H8 += dd;
         H9 += e;
 
-        //
-        // reset the offset and clean out the word buffer.
-        //
+        
+        
+        
         xOff = 0;
         for (int i = 0; i != X.length; i++) {
             X[i] = 0;

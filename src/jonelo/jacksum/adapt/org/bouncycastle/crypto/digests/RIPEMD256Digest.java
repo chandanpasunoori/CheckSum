@@ -1,31 +1,19 @@
 package jonelo.jacksum.adapt.org.bouncycastle.crypto.digests;
 
-/**
- * implementation of RIPEMD256.
- * <p>
- * <b>note:</b> this algorithm offers the same level of security as RIPEMD128.
- */
 public class RIPEMD256Digest
         extends GeneralDigest {
 
     private static final int DIGEST_LENGTH = 32;
 
-    private int H0, H1, H2, H3, H4, H5, H6, H7; // IV's
+    private int H0, H1, H2, H3, H4, H5, H6, H7; 
 
     private int[] X = new int[16];
     private int xOff;
 
-    /**
-     * Standard constructor
-     */
     public RIPEMD256Digest() {
         reset();
     }
 
-    /**
-     * Copy constructor. This will copy the state of the provided message
-     * digest.
-     */
     public RIPEMD256Digest(RIPEMD256Digest t) {
         super(t);
 
@@ -100,9 +88,6 @@ public class RIPEMD256Digest
         return DIGEST_LENGTH;
     }
 
-    /**
-     * reset the chaining variables to the IV values.
-     */
     public void reset() {
         super.reset();
 
@@ -122,22 +107,12 @@ public class RIPEMD256Digest
         }
     }
 
-    /*
-     * rotate int x left n bits.
-     */
     private final int RL(
             int x,
             int n) {
         return (x << n) | (x >>> (32 - n));
     }
 
-    /*
-     * f1,f2,f3,f4 are the basic RIPEMD128 functions.
-     */
-
-    /*
-     * F
-     */
     private final int f1(
             int x,
             int y,
@@ -145,9 +120,6 @@ public class RIPEMD256Digest
         return x ^ y ^ z;
     }
 
-    /*
-     * G
-     */
     private final int f2(
             int x,
             int y,
@@ -155,9 +127,6 @@ public class RIPEMD256Digest
         return (x & y) | (~x & z);
     }
 
-    /*
-     * H
-     */
     private final int f3(
             int x,
             int y,
@@ -165,9 +134,6 @@ public class RIPEMD256Digest
         return (x | ~y) ^ z;
     }
 
-    /*
-     * I
-     */
     private final int f4(
             int x,
             int y,
@@ -271,9 +237,9 @@ public class RIPEMD256Digest
         cc = H6;
         dd = H7;
 
-        //
-        // Round 1
-        //
+        
+        
+        
         a = F1(a, b, c, d, X[0], 11);
         d = F1(d, a, b, c, X[1], 14);
         c = F1(c, d, a, b, X[2], 15);
@@ -312,9 +278,9 @@ public class RIPEMD256Digest
         a = aa;
         aa = t;
 
-        //
-        // Round 2
-        //
+        
+        
+        
         a = F2(a, b, c, d, X[7], 7);
         d = F2(d, a, b, c, X[4], 6);
         c = F2(c, d, a, b, X[13], 8);
@@ -353,9 +319,9 @@ public class RIPEMD256Digest
         b = bb;
         bb = t;
 
-        //
-        // Round 3
-        //
+        
+        
+        
         a = F3(a, b, c, d, X[3], 11);
         d = F3(d, a, b, c, X[10], 13);
         c = F3(c, d, a, b, X[14], 6);
@@ -394,9 +360,9 @@ public class RIPEMD256Digest
         c = cc;
         cc = t;
 
-        //
-        // Round 4
-        //
+        
+        
+        
         a = F4(a, b, c, d, X[1], 11);
         d = F4(d, a, b, c, X[9], 12);
         c = F4(c, d, a, b, X[11], 14);
@@ -444,9 +410,9 @@ public class RIPEMD256Digest
         H6 += cc;
         H7 += dd;
 
-        //
-        // reset the offset and clean out the word buffer.
-        //
+        
+        
+        
         xOff = 0;
         for (int i = 0; i != X.length; i++) {
             X[i] = 0;

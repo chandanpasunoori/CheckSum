@@ -53,11 +53,6 @@ public class Jacksum {
     private int workingdirlen = 0;
     private boolean windows = false;
 
-    /**
-     * Jacksum's main method for the CLI
-     *
-     * @param args command line arguments
-     */
     public static void main(String args[]) {
         try {
             Jacksum jacksum = new jonelo.jacksum.cli.Jacksum(args);
@@ -69,11 +64,6 @@ public class Jacksum {
         }
     }
 
-    /**
-     * recursive method to traverse folders
-     *
-     * @param dirItem visit this folder
-     */
     private void recursDir(String dirItem) {
         String list[];
         File file = new File(dirItem);
@@ -83,9 +73,9 @@ public class Jacksum {
                 list = file.list();
                 if (list == null) {
 
-                    // isDirectory() returns true, but list() returns null
-                    // this strange behaviour can be detected on NTFS formatted partitions on Windows.
-                    // Such partitions contain a hidden folder called "\System Volume Information"
+                    
+                    
+                    
                     System.err.println("Jacksum: Can't access file system folder \"" + file + "\"");
                     summary.addErrorDir();
                 } else {
@@ -123,7 +113,7 @@ public class Jacksum {
                     }
 
                     for (int i = 0; i < list.length; i++) {
-                        //  fill both vector files and vector dirs
+                        
                         File f = new File(dirname + list[i]);
                         if (f.isDirectory()) {
                             vd.add(list[i]);
@@ -132,10 +122,10 @@ public class Jacksum {
                         }
                     }
 
-                    // only in verbose mode:
-                    // don't print header if options -e -m or -p or _S are used
+                    
+                    
                     if (verbose.getDetails() && !_e && !_m && !_p && !_S) {
-                        // little header
+                        
                         StringBuffer tmp = new StringBuffer(32);
                         tmp.append(vf.size());
                         tmp.append(" file");
@@ -155,12 +145,12 @@ public class Jacksum {
                         System.err.println(tmp.toString());
                     }
 
-                    // files...
+                    
                     for (int a = 0; a < vf.size(); a++) {
                         recursDir(dirname + vf.get(a));
                     }
 
-                    // dirs...
+                    
                     if (!_f) {
                         for (int c = 0; c < vd.size(); c++) {
                             System.err.println("Jacksum: " + vd.get(c) + ": Is a directory");
@@ -176,11 +166,6 @@ public class Jacksum {
         }
     }
 
-    /**
-     * process one folder
-     *
-     * @param dirItem visit this folder
-     */
     private void oneDir(String dirItem) {
         String list[];
         File file = new File(dirItem);
@@ -211,15 +196,10 @@ public class Jacksum {
         }
     }
 
-    /**
-     * print a formatted checksum line
-     *
-     * @param filename process this file
-     */
     private void processItem(String filename) {
         File f = new File(filename);
         if (f.isFile()) {
-            // don't calculate the checksum of the outputFile
+            
             if (_o || _O) {
                 try {
                     if (new File(outputFile).getCanonicalPath().equals(f.getCanonicalPath())) {
@@ -229,7 +209,7 @@ public class Jacksum {
                     System.err.println("Jacksum: Error: " + e);
                 }
             }
-            // don't calculate the checksum of the errorFile
+            
             if (_u || _U) {
                 try {
                     if (new File(errorFile).getCanonicalPath().equals(f.getCanonicalPath())) {
@@ -247,9 +227,9 @@ public class Jacksum {
                         checksum.update(checksum.getTimestampFormatted().getBytes("ISO-8859-1"));
                     }
 
-                    // let's provide platform independency with -S
-                    // as it is a summary which incorporates filenames into the checksum,
-                    // but we don't print them
+                    
+                    
+                    
                     String tmp = _w ? filename.substring(workingdirlen) : filename;
                     if (File.separatorChar != '/') {
                         tmp = tmp.replace(File.separatorChar, '/');
@@ -260,9 +240,9 @@ public class Jacksum {
                 } else {
                     if (_e) {
                         checksum.readFile(filename, true);
-                        // File f1 = new File(filename);
-                        // if (_r && !_p) checksum.setFilename(f1.getName());
-                        // checksum.setFilename(filename);
+                        
+                        
+                        
                         expectationContinue(checksum, expected);
                     } else {
                         String ret = getChecksumOutput(filename);
@@ -281,14 +261,14 @@ public class Jacksum {
                 String detail = null;
                 if (verbose.getDetails()) {
                     detail = filename + " [" + e.getMessage() + "]";
-                    // e.printStackTrace();
+                    
                 } else {
                     detail = filename;
                 }
                 System.err.println("Jacksum: Error: " + detail);
             }
         } else {
-            // a fifo for example (mkfifo myfifo)
+            
             if (!_f) {
                 summary.addErrorFile();
                 System.err.println("Jacksum: " + filename + ": Is not a regular file");
@@ -296,12 +276,6 @@ public class Jacksum {
         }
     }
 
-    /**
-     * get a formatted checksum line
-     *
-     * @return a full formatted checksum line
-     * @param filename process this file
-     */
     private String getChecksumOutput(String filename) throws IOException {
         checksum.readFile(filename, true);
         File f = new File(filename);
@@ -345,11 +319,6 @@ public class Jacksum {
         return temp;
     }
 
-    /**
-     * Creates the Jacksum program (CLI).
-     *
-     * @param args the program arguments
-     */
     public Jacksum(String args[]) throws ExitException {
         jonelo.sugar.util.GeneralProgram.requiresMinimumJavaVersion("1.3.1");
         boolean stdin = false, _s = false, _D = false, _q = false, _c = false, _E = false;
@@ -492,7 +461,7 @@ public class Jacksum {
                 } else if (arg.equals("-e")) {
                     if (firstfile < args.length) {
                         _e = true;
-                        // implicit set -f
+                        
                         _f = true;
                         arg = args[firstfile++];
                         expected = arg;
@@ -500,7 +469,7 @@ public class Jacksum {
                         throw new ExitException("Option -e requires an argument", ExitStatus.PARAMETER);
                     }
                 } else if (arg.equals("-h")) {
-                    // default inits
+                    
                     String code = "en";
                     String search = null;
                     if (firstfile < args.length) {
@@ -558,7 +527,7 @@ public class Jacksum {
                                 }
                             }
                         }
-                    } // it is valid to have just -V as the only parameter
+                    } 
                 } else if (arg.equals("-o")) {
                     _o = true;
 
@@ -611,15 +580,15 @@ public class Jacksum {
                     throw new ExitException("Unknown argument. Use -h for help. Exit.", ExitStatus.PARAMETER);
                 }
 
-            } // end while
+            } 
         }
-        // end parsing arguments
+        
         if (_V && args.length == 1) {
             JacksumHelp.printVersion();
             throw new ExitException(null, ExitStatus.OK);
         }
 
-        // initialize platform specifics (for -r)
+        
         windows = System.getProperty("os.name").toLowerCase(Locale.US).startsWith("windows");
 
         PrintStream streamShared = null;
@@ -647,7 +616,7 @@ public class Jacksum {
                     System.setOut(streamShared);
                 } else {
                     PrintStream out = new PrintStream(new FileOutputStream(outputFile));
-                    //PrintStream tee = new TeeStream(System.out, out);
+                    
                     System.setOut(out);
                 }
             } catch (Exception e) {
@@ -666,7 +635,7 @@ public class Jacksum {
                     System.setErr(streamShared);
                 } else {
                     PrintStream err = new PrintStream(new FileOutputStream(errorFile));
-                    //PrintStream tee = new TeeStream(System.out, err);
+                    
                     System.setErr(err);
                 }
             } catch (Exception e) {
@@ -674,29 +643,29 @@ public class Jacksum {
             }
         }
 
-        if (checksumArg == null) { // take the default
+        if (checksumArg == null) { 
             checksumArg = "sha1";
         }
 
-        // exit if selected parameters make no sense
+        
         if (_e && checksumArg.equals("none")) {
             throw new ExitException("-a none and -e cannot go together.", ExitStatus.PARAMETER);
         }
 
-        // do an implicit -A when we have kaffe or gij
+        
         if (!_alternate) {
             if (!GeneralProgram.isJ2SEcompatible()) {
                 _alternate = true;
             }
         }
-        // get the checksum implementation
+        
         try {
             checksum = JacksumAPI.getChecksumInstance(checksumArg, _alternate);
         } catch (NoSuchAlgorithmException nsae) {
             throw new ExitException(nsae.getMessage() + "\nUse -a <code> to specify a valid one.\nFor help and a list of all supported algorithms use -h.\nExit.", ExitStatus.PARAMETER);
         }
 
-        // start summary's timer implicit
+        
         summary.setEnabled(verbose.getSummary());
 
         if (_s) {
@@ -730,7 +699,7 @@ public class Jacksum {
         if (_E) {
             try {
                 if (encoding.length() == 0) {
-                    throw new EncodingException("Encoding not supported"); // internal only, not from the cli
+                    throw new EncodingException("Encoding not supported"); 
                 }
                 checksum.setEncoding(encoding);
             } catch (EncodingException e) {
@@ -738,12 +707,12 @@ public class Jacksum {
             }
         }
 
-        // timestamp
-        if (_t && !_q) { // if -q is used, the -t will be ignored anyway
+        
+        if (_t && !_q) { 
             try {
-                // #QUOTE and #SEPARATOR should be replaced
+                
                 timestampFormat = decodeQuoteAndSeparator(timestampFormat, metaInfo.getSeparator());
-                // test, if the timestampformat is valid
+                
                 Format timestampFormatter = new SimpleDateFormat(timestampFormat);
                 timestampFormatter.format(new Date());
 
@@ -757,9 +726,9 @@ public class Jacksum {
             throw new ExitException("Jacksum: -S and -m can't go together, it is not supported.", ExitStatus.PARAMETER);
         }
 
-//        if (_c && _w) {
-//            throw new ExitException("Jacksum: -c and -w can't go together, it is not supported.", ExitStatus.PARAMETER);
-//        }
+
+
+
         if (_m && _G && groupingChar == ';') {
             throw new ExitException("Jacksum: Option -G doesn't allow a semicolon when -m has been specified", ExitStatus.PARAMETER);
         }
@@ -782,11 +751,11 @@ public class Jacksum {
             metaInfo.setAlternate(_alternate);
         }
 
-        // meta-info was requested
+        
         if (_m) {
-            // check if tformat contains a semicolon
-            // if this is the case, we will have trouble while parsing
-            // the meta-info, because semicolon is the meta-separator
+            
+            
+            
             if (_t) {
                 if (timestampFormat.indexOf(";") > -1) {
                     throw new ExitException("Option -t contains a semicolon. This is not supported with -m.", ExitStatus.PARAMETER);
@@ -816,10 +785,10 @@ public class Jacksum {
         String ret = null;
         String filename = null;
 
-        // no file parameter
-        if (_q) { // quick sequence and quit
+        
+        if (_q) { 
 
-            // ignore unsuitable parameters
+            
             if (_t) {
                 if (verbose.getWarnings()) {
                     System.err.println("Jacksum: Warning: Option -t will be ignored, because option -q is used.");
@@ -867,7 +836,7 @@ public class Jacksum {
                     sequence = sequence.substring(4);
                 }
 
-                // default, a hex sequence is expected
+                
                 if ((sequence.length() % 2) == 1) {
                     throw new ExitException("An even number of nibbles was expected.\nExit.", ExitStatus.PARAMETER);
                 }
@@ -894,9 +863,9 @@ public class Jacksum {
             throw new ExitException(null, 0);
         } else {
 
-            // checking files in the checkfile
+            
             if (_c) {
-                // ignoring flags
+                
                 _F = false;
                 File f = new File(checkfile);
                 if (!f.exists()) {
@@ -912,7 +881,7 @@ public class Jacksum {
                             if (_w) {
                                 cf.setWorkingDir(workingDir);
                             }
-                            cf.setMetaInfo(metaInfo); // this is our fallback if the checkfile doesn't contain meta info
+                            cf.setMetaInfo(metaInfo); 
                             cf.setVerbose(verbose);
                             cf.setSummary(summary);
                             cf.setList(_l);
@@ -926,7 +895,7 @@ public class Jacksum {
                             error = ExitStatus.CHECKFILE;
                             System.err.println(e);
                         }
-                        // until now there is no error, but the check failed
+                        
                         if ((error == ExitStatus.OK) && (cf.getRemoved() + cf.getModified() > 0)) {
                             error = ExitStatus.MISMATCH;
                         }
@@ -937,11 +906,11 @@ public class Jacksum {
 
             } else {
 
-                // there is only one file parameter
+                
                 if (args.length - firstfile == 1) {
 
                     String dir = args[firstfile];
-                    // check if the parameter is a directory
+                    
                     File f = new File(dir);
                     if (!f.exists()) {
                         throw new ExitException("Jacksum: " + dir + ": No such file or directory. Exit.", ExitStatus.IO);
@@ -967,7 +936,7 @@ public class Jacksum {
             }
         }
 
-        // processing a directory
+        
         if (_r || _D) {
 
             String dir = null;
@@ -984,7 +953,7 @@ public class Jacksum {
             } else {
                 if (f.isDirectory()) {
                     if (_m) {
-                        // sourceforge-feature request #968487
+                        
                         System.out.println(metaInfo.getCommentchars() + " param dir=" + dir);
                     }
 
@@ -1006,8 +975,8 @@ public class Jacksum {
             }
         } else {
 
-            // processing standard input
-            if (stdin || (firstfile == args.length)) { // no file parameter
+            
+            if (stdin || (firstfile == args.length)) { 
 
                 if (_t) {
                     if (verbose.getWarnings()) {
@@ -1023,7 +992,7 @@ public class Jacksum {
                     do {
                         s = in.readLine();
                         if (s != null) {
-                            // better than s=s+"\n";
+                            
                             StringBuffer sb = new StringBuffer(s.length() + 1);
                             sb.insert(0, s);
                             sb.insert(s.length(), '\n');
@@ -1042,7 +1011,7 @@ public class Jacksum {
                 }
             } else {
 
-                // processing arguments file list
+                
                 for (int i = firstfile; i < args.length; i++) {
                     filename = args[i];
                     try {
@@ -1051,11 +1020,11 @@ public class Jacksum {
                         if (!file.exists()) {
                             ret = "Jacksum: " + filename + ": No such file or directory";
                         } else {
-                            if (file.isDirectory()) { // directory
+                            if (file.isDirectory()) { 
                                 if (!_f) {
                                     ret = "Jacksum: " + filename + ": Is a directory";
                                 }
-                            } else { // file
+                            } else { 
                                 processItem(filename);
                             }
                         }
@@ -1066,14 +1035,14 @@ public class Jacksum {
                     } catch (Exception e) {
                         System.err.println(e);
                     }
-                } // end processing arguments file list
+                } 
                 if (_S) {
                     printS();
                 }
             }
-        } //
+        } 
         summary.print();
-    } // end constructor
+    } 
 
     private int getWorkingdirLength(String parent) {
         if (parent == null) {

@@ -1,36 +1,7 @@
-/**
- * ****************************************************************************
- *
- * Jacksum version 1.7.0 - checksum utility in Java Copyright (C) 2001-2006
- * Dipl.-Inf. (FH) Johann Nepomuk Loefflmann, All Rights Reserved,
- * http://www.jonelo.de
- *
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
- * Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- * E-mail: jonelo@jonelo.de
- *
- ****************************************************************************
- */
 package jonelo.jacksum.algorithm;
 
-/**
- * A class that can be used to compute the Cksum of a data stream. This is a
- * 100% Java implementation.
- */
-// implemented in Java from original GNU C source
-// it computes a POSIX 1003.2 checksum.
+
+
 public class Cksum extends AbstractChecksum {
 
     protected int value;
@@ -109,16 +80,16 @@ public class Cksum extends AbstractChecksum {
         update((byte) (b & 0xFF));
     }
 
-    // a 2.5 GB file (length=2684354560), filled with random
-    // bytes (Java seed=0), returns a cksum value of 128656372
+    
+    
     public long getValue() {
 
-        // store both length and value to temps,
-        // so we can launch getValue() multiple times
+        
+        
         long tmpLength = length;
         int tmpValue = value;
 
-        // include the length of the file to the checksum value
+        
         for (; tmpLength != 0; tmpLength >>= 8) {
             tmpValue = (tmpValue << 8) ^ crctab[((tmpValue >> 24) ^ (int) (tmpLength & 0xFF)) & 0xFF];
         }

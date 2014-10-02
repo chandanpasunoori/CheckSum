@@ -1,68 +1,54 @@
 package jonelo.jacksum.adapt.gnu.crypto.hash;
 
-// ----------------------------------------------------------------------------
-// $Id: Sha384.java,v 1.1 2003/09/26 23:40:15 raif Exp $
-//
-// Copyright (C) 2003 Free Software Foundation, Inc.
-//
-// This file is part of GNU Crypto.
-//
-// GNU Crypto is free software; you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation; either version 2, or (at your option)
-// any later version.
-//
-// GNU Crypto is distributed in the hope that it will be useful, but
-// WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-// General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program; see the file COPYING.  If not, write to the
-//
-//    Free Software Foundation Inc.,
-//    59 Temple Place - Suite 330,
-//    Boston, MA 02111-1307
-//    USA
-//
-// Linking this library statically or dynamically with other modules is
-// making a combined work based on this library.  Thus, the terms and
-// conditions of the GNU General Public License cover the whole
-// combination.
-//
-// As a special exception, the copyright holders of this library give
-// you permission to link this library with independent modules to
-// produce an executable, regardless of the license terms of these
-// independent modules, and to copy and distribute the resulting
-// executable under terms of your choice, provided that you also meet,
-// for each linked independent module, the terms and conditions of the
-// license of that module.  An independent module is a module which is
-// not derived from or based on this library.  If you modify this
-// library, you may extend this exception to your version of the
-// library, but you are not obligated to do so.  If you do not wish to
-// do so, delete this exception statement from your version.
-// ----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 import jonelo.jacksum.adapt.gnu.crypto.Registry;
 import jonelo.jacksum.adapt.gnu.crypto.util.Util;
 
-/**
- * <p>
- * Implementation of SHA2-2 [SHA-384] per the IETF Draft Specification.</p>
- *
- * <p>
- * References:</p>
- * <ol>
- * <li><a href="http://ftp.ipv4.heanet.ie/pub/ietf/internet-drafts/draft-ietf-ipsec-ciph-aes-cbc-03.txt">
- * Descriptions of SHA-256, SHA-384, and SHA-512</a>,</li>
- * <li>http://csrc.nist.gov/cryptval/shs/sha256-384-512.pdf</li>
- * </ol>
- *
- * @version $Revision: 1.1 $
- */
 public class Sha384 extends BaseHash {
 
-    // Constants and variables
-    // -------------------------------------------------------------------------
+    
+    
     private static final long[] k = {
         0x428a2f98d728ae22L, 0x7137449123ef65cdL, 0xb5c0fbcfec4d3b2fL, 0xe9b5dba58189dbbcL,
         0x3956c25bf348b538L, 0x59f111f1b605d019L, 0x923f82a4af194f9bL, 0xab1c5ed5da6d8118L,
@@ -86,7 +72,7 @@ public class Sha384 extends BaseHash {
         0x4cc5d4becb3e42b6L, 0x597f299cfc657e2aL, 0x5fcb6fab3ad6faecL, 0x6c44198c4a475817L
     };
 
-    private static final int BLOCK_SIZE = 128; // inner block size in bytes
+    private static final int BLOCK_SIZE = 128; 
 
     private static final String DIGEST0
             = "CB00753F45A35E8BB5A03D699AC65007272C32AB0EDED1631A8B605A43FF5BED"
@@ -94,31 +80,16 @@ public class Sha384 extends BaseHash {
 
     private static final long[] w = new long[80];
 
-    /**
-     * caches the result of the correctness test, once executed.
-     */
     private static Boolean valid;
 
-    /**
-     * 512-bit interim result.
-     */
     private long h0, h1, h2, h3, h4, h5, h6, h7;
 
-    // Constructor(s)
-    // -------------------------------------------------------------------------
-    /**
-     * Trivial 0-arguments constructor.
-     */
+    
+    
     public Sha384() {
         super(Registry.SHA384_HASH, 48, BLOCK_SIZE);
     }
 
-    /**
-     * <p>
-     * Private constructor for cloning purposes.</p>
-     *
-     * @param md the instance to clone.
-     */
     private Sha384(Sha384 md) {
         this();
 
@@ -134,21 +105,21 @@ public class Sha384 extends BaseHash {
         this.buffer = (byte[]) md.buffer.clone();
     }
 
-    // Class methods
-    // -------------------------------------------------------------------------
+    
+    
     public static final long[] G(long hh0, long hh1, long hh2, long hh3, long hh4,
             long hh5, long hh6, long hh7, byte[] in, int offset) {
         return sha(hh0, hh1, hh2, hh3, hh4, hh5, hh6, hh7, in, offset);
     }
 
-   // Instance methods
-    // -------------------------------------------------------------------------
-    // java.lang.Cloneable interface implementation ----------------------------
+    
+    
+    
     public Object clone() {
         return new Sha384(this);
     }
 
-    // Implementation of concrete methods in BaseHash --------------------------
+    
     protected void transform(byte[] in, int offset) {
         long[] result = sha(h0, h1, h2, h3, h4, h5, h6, h7, in, offset);
 
@@ -167,11 +138,11 @@ public class Sha384 extends BaseHash {
         int padding = (n < 112) ? (112 - n) : (240 - n);
         byte[] result = new byte[padding + 16];
 
-        // padding is always binary 1 followed by binary 0s
+        
         result[0] = (byte) 0x80;
 
-        // save number of bits, casting the long to an array of 8 bytes
-        // TODO: FIX Only ~35 bits of 128 bit counter usable this way
+        
+        
         long bits = count << 3;
         padding += 8;
         result[padding++] = (byte) (bits >>> 56);
@@ -200,15 +171,15 @@ public class Sha384 extends BaseHash {
             (byte) (h4 >>> 24), (byte) (h4 >>> 16), (byte) (h4 >>> 8), (byte) h4,
             (byte) (h5 >>> 56), (byte) (h5 >>> 48), (byte) (h5 >>> 40), (byte) (h5 >>> 32),
             (byte) (h5 >>> 24), (byte) (h5 >>> 16), (byte) (h5 >>> 8), (byte) h5
-//         (byte)(h6 >>> 56), (byte)(h6 >>> 48), (byte)(h6 >>> 40), (byte)(h6 >>> 32),
-//         (byte)(h6 >>> 24), (byte)(h6 >>> 16), (byte)(h6 >>>  8), (byte) h6,
-//         (byte)(h7 >>> 56), (byte)(h7 >>> 48), (byte)(h7 >>> 40), (byte)(h7 >>> 32),
-//         (byte)(h7 >>> 24), (byte)(h7 >>> 16), (byte)(h7 >>>  8), (byte) h7
+
+
+
+
         };
     }
 
     protected void resetContext() {
-        // magic SHA-384 initialisation constants
+        
         h0 = 0xcbbb9d5dc1059ed8L;
         h1 = 0x629a292a367cd507L;
         h2 = 0x9159015a3070dd17L;
@@ -222,16 +193,16 @@ public class Sha384 extends BaseHash {
     public boolean selfTest() {
         if (valid == null) {
             Sha384 md = new Sha384();
-            md.update((byte) 0x61); // a
-            md.update((byte) 0x62); // b
-            md.update((byte) 0x63); // c
+            md.update((byte) 0x61); 
+            md.update((byte) 0x62); 
+            md.update((byte) 0x63); 
             String result = Util.toString(md.digest());
             valid = new Boolean(DIGEST0.equals(result));
         }
         return valid.booleanValue();
     }
 
-    // SHA specific methods ----------------------------------------------------
+    
     private static final synchronized long[]
             sha(long hh0, long hh1, long hh2, long hh3, long hh4, long hh5, long hh6, long hh7, byte[] in, int offset) {
         long A = hh0;
@@ -264,7 +235,7 @@ public class Sha384 extends BaseHash {
         for (r = 0; r < 80; r++) {
 
             T = H + (((E >>> 14) | (E << 50)) ^ ((E >>> 18) | (E << 46)) ^ ((E >>> 41) | (E << 23))) + ((E & F) ^ ((~E) & G)) + k[r] + w[r];
-            // T IS INCORRECT SOMEHOW
+            
             T2 = (((A >>> 28) | (A << 36)) ^ ((A >>> 34) | (A << 30)) ^ ((A >>> 39) | (A << 25))) + ((A & B) ^ (A & C) ^ (B & C));
             H = G;
             G = F;

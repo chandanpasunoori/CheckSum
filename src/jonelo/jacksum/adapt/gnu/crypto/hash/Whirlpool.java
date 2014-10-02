@@ -1,92 +1,67 @@
 package jonelo.jacksum.adapt.gnu.crypto.hash;
 
-// ----------------------------------------------------------------------------
-// $Id: Whirlpool.java,v 1.9 2003/06/11 12:25:59 raif Exp $
-//
-// Copyright (C) 2001, 2002, Free Software Foundation, Inc.
-//
-// This file is part of GNU Crypto.
-//
-// GNU Crypto is free software; you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation; either version 2, or (at your option)
-// any later version.
-//
-// GNU Crypto is distributed in the hope that it will be useful, but
-// WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-// General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program; see the file COPYING.  If not, write to the
-//
-//    Free Software Foundation Inc.,
-//    59 Temple Place - Suite 330,
-//    Boston, MA 02111-1307
-//    USA
-//
-// Linking this library statically or dynamically with other modules is
-// making a combined work based on this library.  Thus, the terms and
-// conditions of the GNU General Public License cover the whole
-// combination.
-//
-// As a special exception, the copyright holders of this library give
-// you permission to link this library with independent modules to
-// produce an executable, regardless of the license terms of these
-// independent modules, and to copy and distribute the resulting
-// executable under terms of your choice, provided that you also meet,
-// for each linked independent module, the terms and conditions of the
-// license of that module.  An independent module is a module which is
-// not derived from or based on this library.  If you modify this
-// library, you may extend this exception to your version of the
-// library, but you are not obligated to do so.  If you do not wish to
-// do so, delete this exception statement from your version.
-// ----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 import jonelo.jacksum.adapt.gnu.crypto.Registry;
 import jonelo.jacksum.adapt.gnu.crypto.util.Util;
 
-/**
- * <p>
- * Whirlpool, a new 512-bit hashing function operating on messages less than 2
- * ** 256 bits in length. The function structure is designed according to the
- * Wide Trail strategy and permits a wide variety of implementation trade-offs.
- * </p>
- *
- * <p>
- * <b>IMPORTANT</b>: This implementation is not thread-safe.</p>
- *
- * <p>
- * References:</p>
- *
- * <ol>
- * <li><a href="http://planeta.terra.com.br/informatica/paulobarreto/WhirlpoolPage.html">
- * The WHIRLPOOL Hashing Function</a>.<br>
- * <a href="mailto:paulo.barreto@terra.com.br">Paulo S.L.M. Barreto</a> and
- * <a href="mailto:vincent.rijmen@esat.kuleuven.ac.be">Vincent Rijmen</a>.</li>
- * </ol>
- *
- * @version $Revision: 1.9 $
- */
 public final class Whirlpool extends BaseHash {
 
-   // Debugging methods and variables
-    // -------------------------------------------------------------------------
-//   private static final boolean DEBUG = false;
-//   private static final int debuglevel = 3;
-    // Constants and variables
-    // -------------------------------------------------------------------------
-    private static final int BLOCK_SIZE = 64; // inner block size in bytes
+    
+    
 
-    /**
-     * The digest of the 0-bit long message.
-     */
+
+    
+    
+    private static final int BLOCK_SIZE = 64; 
+
     private static final String DIGEST0
             = "470F0409ABAA446E49667D4EBE12A14387CEDBD10DD17B8243CAD550A089DC0F"
             + "EEA7AA40F6C2AAAB71C6EBD076E43C7CFCA0AD32567897DCB5969861049A0F5A";
 
-    private static final int R = 10; // default number of rounds
+    private static final int R = 10; 
 
-    private static final String Sd = // p. 19 [WHIRLPOOL]
+    private static final String Sd = 
             "\u1823\uc6E8\u87B8\u014F\u36A6\ud2F5\u796F\u9152"
             + "\u60Bc\u9B8E\uA30c\u7B35\u1dE0\ud7c2\u2E4B\uFE57"
             + "\u1577\u37E5\u9FF0\u4AdA\u58c9\u290A\uB1A0\u6B85"
@@ -114,38 +89,23 @@ public final class Whirlpool extends BaseHash {
     private static final long[] T7 = new long[256];
     private static final long[] rc = new long[R];
 
-    /**
-     * caches the result of the correctness test, once executed.
-     */
     private static Boolean valid;
 
-    /**
-     * The 512-bit context as 8 longs.
-     */
     private long H0, H1, H2, H3, H4, H5, H6, H7;
 
-    /**
-     * Work area for computing the round key schedule.
-     */
     private long k00, k01, k02, k03, k04, k05, k06, k07;
     private long Kr0, Kr1, Kr2, Kr3, Kr4, Kr5, Kr6, Kr7;
 
-    /**
-     * work area for transforming the 512-bit buffer.
-     */
     private long n0, n1, n2, n3, n4, n5, n6, n7;
     private long nn0, nn1, nn2, nn3, nn4, nn5, nn6, nn7;
 
-    /**
-     * work area for holding block cipher's intermediate values.
-     */
     private long w0, w1, w2, w3, w4, w5, w6, w7;
 
-    // Static code - to intialise lookup tables --------------------------------
+    
     static {
-//      long time = System.currentTimeMillis();
 
-        int ROOT = 0x11d; // para. 2.1 [WHIRLPOOL]
+
+        int ROOT = 0x11d; 
         int i, r, j;
         long s, s2, s3, s4, s5, s8, s9, t;
         char c;
@@ -189,107 +149,15 @@ public final class Whirlpool extends BaseHash {
                     | (S[j++] & 0xFFL) << 8 | (S[j++] & 0xFFL);
         }
 
-//      time = System.currentTimeMillis() - time;
 
-        /*      if (DEBUG && debuglevel > 8) {
-         System.out.println("==========");
-         System.out.println();
-         System.out.println("Static data");
-         System.out.println();
-
-         System.out.println();
-         System.out.println("T0[]:");
-         for (i = 0 ;i < 64; i++){
-         for (j = 0; j < 4; j++) {
-         System.out.print("0x"+Util.toString(T0[i*4+j])+", ");
-         }
-         System.out.println();
-         }
-         System.out.println();
-         System.out.println("T1[]:");
-         for (i = 0 ;i < 64; i++){
-         for (j = 0; j < 4; j++) {
-         System.out.print("0x"+Util.toString(T1[i*4+j])+", ");
-         }
-         System.out.println();
-         }
-         System.out.println();
-         System.out.println("T2[]:");
-         for (i = 0 ;i < 64; i++){
-         for (j = 0; j < 4; j++) {
-         System.out.print("0x"+Util.toString(T2[i*4+j])+", ");
-         }
-         System.out.println();
-         }
-         System.out.println();
-         System.out.println("T3[]:");
-         for (i = 0 ;i < 64; i++){
-         for (j = 0; j < 4; j++) {
-         System.out.print("0x"+Util.toString(T3[i*4+j])+", ");
-         }
-         System.out.println();
-         }
-         System.out.println();
-         System.out.println("T4[]:");
-         for (i = 0 ;i < 64; i++){
-         for (j = 0; j < 4; j++) {
-         System.out.print("0x"+Util.toString(T4[i*4+j])+", ");
-         }
-         System.out.println();
-         }
-         System.out.println();
-         System.out.println("T5[]:");
-         for (i = 0 ;i < 64; i++){
-         for (j = 0; j < 4; j++) {
-         System.out.print("0x"+Util.toString(T5[i*4+j])+", ");
-         }
-         System.out.println();
-         }
-         System.out.println();
-         System.out.println("T6[]:");
-         for (i = 0 ;i < 64; i++){
-         for (j = 0; j < 4; j++) {
-         System.out.print("0x"+Util.toString(T5[i*4+j])+", ");
-         }
-         System.out.println();
-         }
-         System.out.println();
-         System.out.println("T7[]:");
-         for (i = 0 ;i < 64; i++){
-         for (j = 0; j < 4; j++) {
-         System.out.print("0x"+Util.toString(T5[i*4+j])+", ");
-         }
-         System.out.println();
-         }
-         System.out.println();
-         System.out.println("rc[]:");
-         for (i = 0; i < R; i++) {
-         System.out.println("0x"+Util.toString(rc[i]));
-         }
-         System.out.println();
-
-         System.out.println();
-         System.out.println("Total initialization time: "+time+" ms.");
-         System.out.println();
-         }
-         */
     }
 
-    // Constructor(s)
-    // -------------------------------------------------------------------------
-    /**
-     * Trivial 0-arguments constructor.
-     */
+    
+    
     public Whirlpool() {
         super(Registry.WHIRLPOOL_HASH, 20, BLOCK_SIZE);
     }
 
-    /**
-     * <p>
-     * Private constructor for cloning purposes.</p>
-     *
-     * @param md the instance to clone.
-     */
     private Whirlpool(Whirlpool md) {
         this();
 
@@ -305,18 +173,18 @@ public final class Whirlpool extends BaseHash {
         this.buffer = (byte[]) md.buffer.clone();
     }
 
-   // Class methods
-    // -------------------------------------------------------------------------
-    // Instance methods
-    // -------------------------------------------------------------------------
-    // java.lang.Cloneable interface implementation ----------------------------
+    
+    
+    
+    
+    
     public Object clone() {
         return (new Whirlpool(this));
     }
 
-    // Implementation of concrete methods in BaseHash --------------------------
+    
     protected void transform(byte[] in, int offset) {
-        // apply mu to the input
+        
         n0 = (in[offset++] & 0xFFL) << 56 | (in[offset++] & 0xFFL) << 48
                 | (in[offset++] & 0xFFL) << 40 | (in[offset++] & 0xFFL) << 32
                 | (in[offset++] & 0xFFL) << 24 | (in[offset++] & 0xFFL) << 16
@@ -350,7 +218,7 @@ public final class Whirlpool extends BaseHash {
                 | (in[offset++] & 0xFFL) << 24 | (in[offset++] & 0xFFL) << 16
                 | (in[offset++] & 0xFFL) << 8 | (in[offset++] & 0xFFL);
 
-        // transform K into the key schedule Kr; 0 <= r <= R
+        
         k00 = H0;
         k01 = H1;
         k02 = H2;
@@ -369,12 +237,12 @@ public final class Whirlpool extends BaseHash {
         nn6 = n6 ^ k06;
         nn7 = n7 ^ k07;
 
-        // intermediate cipher output
+        
         w0 = w1 = w2 = w3 = w4 = w5 = w6 = w7 = 0L;
 
         for (int r = 0; r < R; r++) {
-            // 1. compute intermediate round key schedule by applying ro[rc]
-            // to the previous round key schedule --rc being the round constant
+            
+            
             Kr0 = T0[(int) ((k00 >> 56) & 0xFFL)] ^ T1[(int) ((k07 >> 48) & 0xFFL)]
                     ^ T2[(int) ((k06 >> 40) & 0xFFL)] ^ T3[(int) ((k05 >> 32) & 0xFFL)]
                     ^ T4[(int) ((k04 >> 24) & 0xFFL)] ^ T5[(int) ((k03 >> 16) & 0xFFL)]
@@ -425,7 +293,7 @@ public final class Whirlpool extends BaseHash {
             k06 = Kr6;
             k07 = Kr7;
 
-            // 2. incrementally compute the cipher output
+            
             w0 = T0[(int) ((nn0 >> 56) & 0xFFL)] ^ T1[(int) ((nn7 >> 48) & 0xFFL)]
                     ^ T2[(int) ((nn6 >> 40) & 0xFFL)] ^ T3[(int) ((nn5 >> 32) & 0xFFL)]
                     ^ T4[(int) ((nn4 >> 24) & 0xFFL)] ^ T5[(int) ((nn3 >> 16) & 0xFFL)]
@@ -477,7 +345,7 @@ public final class Whirlpool extends BaseHash {
             nn7 = w7;
         }
 
-        // apply the Miyaguchi-Preneel hash scheme
+        
         H0 ^= w0 ^ n0;
         H1 ^= w1 ^ n1;
         H2 ^= w2 ^ n2;
@@ -489,24 +357,24 @@ public final class Whirlpool extends BaseHash {
     }
 
     protected byte[] padBuffer() {
-        // [WHIRLPOOL] p. 6:
-        // "...padded with a 1-bit, then with as few 0-bits as necessary to
-        // obtain a bit string whose length is an odd multiple of 256, and
-        // finally with the 256-bit right-justified binary representation of L."
-        // in this implementation we use 'count' as the number of bytes hashed
-        // so far. hence the minimal number of bytes added to the message proper
-        // are 33 (1 for the 1-bit followed by the 0-bits and the encoding of
-        // the count framed in a 256-bit block). our formula is then:
-        //        count + 33 + padding = 0 (mod BLOCK_SIZE)
+        
+        
+        
+        
+        
+        
+        
+        
+        
         int n = (int) ((count + 33) % BLOCK_SIZE);
         int padding = n == 0 ? 33 : BLOCK_SIZE - n + 33;
 
         byte[] result = new byte[padding];
 
-        // padding is always binary 1 followed by binary 0s
+        
         result[0] = (byte) 0x80;
 
-        // save (right justified) the number of bits hashed
+        
         long bits = count * 8;
         int i = padding - 8;
         result[i++] = (byte) (bits >>> 56);
@@ -522,7 +390,7 @@ public final class Whirlpool extends BaseHash {
     }
 
     protected byte[] getResult() {
-        // apply inverse mu to the context
+        
         byte[] result = new byte[]{
             (byte) (H0 >>> 56), (byte) (H0 >>> 48), (byte) (H0 >>> 40), (byte) (H0 >>> 32),
             (byte) (H0 >>> 24), (byte) (H0 >>> 16), (byte) (H0 >>> 8), (byte) H0,

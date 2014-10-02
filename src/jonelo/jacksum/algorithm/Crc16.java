@@ -1,39 +1,10 @@
-/**
- * ****************************************************************************
- *
- * Jacksum version 1.7.0 - checksum utility in Java Copyright (C) 2001-2006
- * Dipl.-Inf. (FH) Johann Nepomuk Loefflmann, All Rights Reserved,
- * http://www.jonelo.de
- *
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
- * Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- * E-mail: jonelo@jonelo.de
- *
- ****************************************************************************
- */
 package jonelo.jacksum.algorithm;
 
-/**
- * A class that can be used to compute the CRC-16 of a data stream. This is a
- * 100% Java implementation.
- */
 public class Crc16 extends AbstractChecksum {
 
     private int val;
 
-    // CRC-16 look-up table
+    
     protected final int crc16tab[] = {
         0x0000, 0xC0C1, 0xC181, 0x0140, 0xC301, 0x03C0, 0x0280, 0xC241,
         0xC601, 0x06C0, 0x0780, 0xC741, 0x0500, 0xC5C1, 0xC481, 0x0440,

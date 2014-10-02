@@ -1,33 +1,8 @@
-/**
- * ****************************************************************************
- *
- * Jacksum version 1.7.0 - checksum utility in Java Copyright (C) 2001-2006
- * Dipl.-Inf. (FH) Johann Nepomuk Loefflmann, All Rights Reserved,
- * http://www.jonelo.de
- *
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
- * Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- * E-mail: jonelo@jonelo.de
- *
- ****************************************************************************
- */
 package jonelo.jacksum.algorithm;
 
 public class Crc64 extends AbstractChecksum {
 
-    // CRC-64 look-up table
+    
     private static final long[] crc64tab = new long[]{
         0x0000000000000000L, 0x01b0000000000000L, 0x0360000000000000L,
         0x02d0000000000000L, 0x06c0000000000000L, 0x0770000000000000L,
@@ -156,31 +131,4 @@ public class Crc64 extends AbstractChecksum {
                 + filename;
     }
 
-    /*
-
-     Testcases:
-     according to http://swissknife.sourceforge.net/CRC64.html
-     "IHATEMATH" -> E3DCADD69B01ADD1
-
-     and according to the Python Cookbook, 2nd Edition, Oreilly
-     Recipe 2.30. Calculating CRC-64 Cyclic Redundancy Checks
-     "IHATEMATH" -> E3DCADD69B01ADD1
-
-     jacksum -a crc64 -X -q TXT:IHATEMATH
-     E3DCADD69B01ADD1        9
-
-     jacksum -a crc64 -X -q 49484154454D415448
-     E3DCADD69B01ADD1        9
-
-
-     according to the CRC64 poly, http://sf.net/projects/jcrcgen
-     "123456789" -> 46A5A9388A5BEFFE
-
-     jacksum -a crc64 -X -q TXT:123456789
-     46A5A9388A5BEFFE        9
-
-     jacksum -a crc64 -X -q 313233343536373839
-     46A5A9388A5BEFFE        9
-
-     */
 }

@@ -1,88 +1,58 @@
 package jonelo.jacksum.adapt.gnu.crypto.hash;
 
-// ----------------------------------------------------------------------------
-// $Id: MD2.java,v 1.5 2002/11/07 17:17:45 raif Exp $
-//
-// Copyright (C) 2001, 2002, Free Software Foundation, Inc.
-//
-// This file is part of GNU Crypto.
-//
-// GNU Crypto is free software; you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation; either version 2, or (at your option)
-// any later version.
-//
-// GNU Crypto is distributed in the hope that it will be useful, but
-// WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-// General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program; see the file COPYING.  If not, write to the
-//
-//    Free Software Foundation Inc.,
-//    59 Temple Place - Suite 330,
-//    Boston, MA 02111-1307
-//    USA
-//
-// Linking this library statically or dynamically with other modules is
-// making a combined work based on this library.  Thus, the terms and
-// conditions of the GNU General Public License cover the whole
-// combination.
-//
-// As a special exception, the copyright holders of this library give
-// you permission to link this library with independent modules to
-// produce an executable, regardless of the license terms of these
-// independent modules, and to copy and distribute the resulting
-// executable under terms of your choice, provided that you also meet,
-// for each linked independent module, the terms and conditions of the
-// license of that module.  An independent module is a module which is
-// not derived from or based on this library.  If you modify this
-// library, you may extend this exception to your version of the
-// library, but you are not obligated to do so.  If you do not wish to
-// do so, delete this exception statement from your version.
-// ----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 import jonelo.jacksum.adapt.gnu.crypto.Registry;
 import jonelo.jacksum.adapt.gnu.crypto.util.Util;
 
-/**
- * <p>
- * An implementation of the MD2 message digest algorithm.</p>
- *
- * <p>
- * MD2 is not widely used. Unless it is needed for compatibility with existing
- * systems, it is not recommended for use in new applications.</p>
- *
- * <p>
- * References:</p>
- *
- * <ol>
- * <li>The <a href="http://www.ietf.org/rfc/rfc1319.txt">MD2</a>
- * Message-Digest Algorithm.<br>
- * B. Kaliski.</li>
- * <li>The <a href="http://www.rfc-editor.org/errata.html">RFC ERRATA PAGE</a>
- * under section RFC 1319.</li>
- * </ol>
- *
- * @version $Revision: 1.5 $
- */
 public class MD2 extends BaseHash {
 
-    // Constants and variables
-    // -------------------------------------------------------------------------
-    /**
-     * An MD2 message digest is always 128-bits long, or 16 bytes.
-     */
+    
+    
     private static final int DIGEST_LENGTH = 16;
 
-    /**
-     * The MD2 algorithm operates on 128-bit blocks, or 16 bytes.
-     */
     private static final int BLOCK_LENGTH = 16;
 
-    /**
-     * 256 byte "random" permutation of the digits of pi.
-     */
     private static final byte[] PI = {
         41, 46, 67, -55, -94, -40, 124, 1, 61, 54, 84, -95, -20, -16, 6,
         19, 98, -89, 5, -13, -64, -57, 115, -116, -104, -109, 43, -39,
@@ -105,68 +75,46 @@ public class MD2 extends BaseHash {
         -37, -103, -115, 51, -97, 17, -125, 20
     };
 
-    /**
-     * The output of this message digest when no data has been input.
-     */
     private static final String DIGEST0 = "8350E5A3E24C153DF2275C9F80692773";
 
-    /**
-     * caches the result of the correctness test, once executed.
-     */
     private static Boolean valid;
 
-    /**
-     * The checksum computed so far.
-     */
     private byte[] checksum;
 
-    /**
-     * Work array needed by encrypt method. First <code>BLOCK_LENGTH</code>
-     * bytes are also used to store the running digest.
-     */
     private byte[] work;
 
-    // Constructor(s)
-    // -------------------------------------------------------------------------
-    /**
-     * Creates a new MD2 digest ready for use.
-     */
+    
+    
     public MD2() {
         super(Registry.MD2_HASH, DIGEST_LENGTH, BLOCK_LENGTH);
     }
 
-    /**
-     * <p>
-     * Private constructor used for cloning.</p>
-     *
-     * @param md2 the instance to clone.
-     */
     private MD2(MD2 md2) {
         this();
 
-        // superclass field
+        
         this.count = md2.count;
         this.buffer = (byte[]) md2.buffer.clone();
 
-        // private field
+        
         this.checksum = (byte[]) md2.checksum.clone();
         this.work = (byte[]) md2.work.clone();
     }
 
-   // Class methods
-    // -------------------------------------------------------------------------
-    // Instance methods
-    // -------------------------------------------------------------------------
-    // java.lang.Cloneable interface implementation ----------------------------
+    
+    
+    
+    
+    
     public Object clone() {
         return new MD2(this);
     }
 
-    // Implementation of abstract methods in BaseHash --------------------------
+    
     protected byte[] getResult() {
         byte[] result = new byte[DIGEST_LENGTH];
 
-        // Encrypt checksum as last block.
+        
         encryptBlock(checksum, 0);
 
         for (int i = 0; i < BLOCK_LENGTH; i++) {
@@ -188,17 +136,6 @@ public class MD2 extends BaseHash {
         return valid.booleanValue();
     }
 
-    /**
-     * <p>
-     * Generates an array of padding bytes. The padding is defined as
-     * <code>i</code> bytes of value <code>i</code>, where <code>i</code> is the
-     * number of bytes to fill the last block of the message to
-     * <code>BLOCK_LENGTH</code> bytes (or <code>BLOCK_LENGTH</code> bytes when
-     * the last block was completely full).</p>
-     *
-     * @return the bytes to pad the remaining bytes in the buffer before
-     * completing a hash operation.
-     */
     protected byte[] padBuffer() {
         int length = BLOCK_LENGTH - (int) (count % BLOCK_LENGTH);
         if (length == 0) {
@@ -211,40 +148,13 @@ public class MD2 extends BaseHash {
         return pad;
     }
 
-    /**
-     * <p>
-     * Adds <code>BLOCK_LENGTH</code> bytes to the running digest.</p>
-     *
-     * @param in the byte array to take the <code>BLOCK_LENGTH</code> bytes
-     * from.
-     * @param off the offset to start from in the given byte array.
-     */
     protected void transform(byte[] in, int off) {
-        // encryptBlock(in, off);
-        // updateCheckSum(in, off);
+        
+        
         updateCheckSumAndEncryptBlock(in, off);
     }
 
-    // Private instance methods ------------------------------------------------
-    /**
-     * Updates the checksum with the <code>BLOCK_LENGTH</code> bytes from the
-     * given array starting at <code>off</code>.
-     */
-    /*
-     private void updateCheckSum(byte[] in, int off) {
-     byte l = checksum[BLOCK_LENGTH-1];
-     for (int i = 0; i < BLOCK_LENGTH; i++) {
-     byte b = in[off+i];
-     //         l = (byte)((checksum[i] & 0xFF) ^ (PI[((b & 0xFF) ^ (l & 0xFF))] & 0xFF));
-     l = (byte)(checksum[i] ^ PI[(b ^ l) & 0xFF]);
-     checksum[i] = l;
-     }
-     }
-     */
-    /**
-     * Adds a new block (<code>BLOCK_LENGTH</code> bytes) to the running digest
-     * from the given byte array starting from the given offset.
-     */
+    
     private void encryptBlock(byte[] in, int off) {
         for (int i = 0; i < BLOCK_LENGTH; i++) {
             byte b = in[off + i];
@@ -255,26 +165,23 @@ public class MD2 extends BaseHash {
         byte t = 0;
         for (int i = 0; i < 18; i++) {
             for (int j = 0; j < 3 * BLOCK_LENGTH; j++) {
-//            t = (byte)((work[j] & 0xFF) ^ (PI[t & 0xFF] & 0xFF));
+
                 t = (byte) (work[j] ^ PI[t & 0xFF]);
                 work[j] = t;
             }
-//         t = (byte)((t + i) & 0xFF);
+
             t = (byte) (t + i);
         }
     }
 
-    /**
-     * Optimized method that combines a checksum update and encrypt of a block.
-     */
     private void updateCheckSumAndEncryptBlock(byte[] in, int off) {
         byte l = checksum[BLOCK_LENGTH - 1];
         for (int i = 0; i < BLOCK_LENGTH; i++) {
             byte b = in[off + i];
             work[BLOCK_LENGTH + i] = b;
-//         work[BLOCK_LENGTH*2+i] = (byte)((work[i] & 0xFF) ^ (b & 0xFF));
+
             work[BLOCK_LENGTH * 2 + i] = (byte) (work[i] ^ b);
-//         l = (byte)((checksum[i] & 0xFF) ^ (PI[((b & 0xFF) ^ (l & 0xFF))] & 0xFF));
+
             l = (byte) (checksum[i] ^ PI[(b ^ l) & 0xFF]);
             checksum[i] = l;
         }
@@ -282,11 +189,11 @@ public class MD2 extends BaseHash {
         byte t = 0;
         for (int i = 0; i < 18; i++) {
             for (int j = 0; j < 3 * BLOCK_LENGTH; j++) {
-//            t = (byte)((work[j] & 0xFF) ^ (PI[t & 0xFF] & 0xFF));
+
                 t = (byte) (work[j] ^ PI[t & 0xFF]);
                 work[j] = t;
             }
-//         t = (byte)((t + i) & 0xFF);
+
             t = (byte) (t + i);
         }
     }

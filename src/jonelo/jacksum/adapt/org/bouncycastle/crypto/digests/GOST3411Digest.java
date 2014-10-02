@@ -6,9 +6,6 @@ import jonelo.jacksum.adapt.org.bouncycastle.crypto.params.KeyParameter;
 import jonelo.jacksum.adapt.org.bouncycastle.crypto.params.ParametersWithSBox;
 import jonelo.jacksum.adapt.org.bouncycastle.crypto.engines.GOST28147Engine;
 
-/**
- * implementation of GOST R 34.11-94
- */
 public class GOST3411Digest
         implements Digest {
 
@@ -24,19 +21,12 @@ public class GOST3411Digest
 
     private BlockCipher cipher = new GOST28147Engine();
 
-    /**
-     * Standard constructor
-     */
     public GOST3411Digest() {
         cipher.init(true, new ParametersWithSBox(null, GOST28147Engine.getSBox("D-TEST")));
 
         reset();
     }
 
-    /**
-     * Copy constructor. This will copy the state of the provided message
-     * digest.
-     */
     public GOST3411Digest(GOST3411Digest t) {
         cipher.init(true, new ParametersWithSBox(null, GOST28147Engine.getSBox("D-TEST")));
 
@@ -66,7 +56,7 @@ public class GOST3411Digest
     public void update(byte in) {
         xBuf[xBufOff++] = in;
         if (xBufOff == xBuf.length) {
-            sumByteArray(xBuf); // calc sum M
+            sumByteArray(xBuf); 
             processBlock(xBuf, 0);
             xBufOff = 0;
         }
@@ -83,14 +73,14 @@ public class GOST3411Digest
         while (len > xBuf.length) {
             System.arraycopy(in, inOff, xBuf, 0, xBuf.length);
 
-            sumByteArray(xBuf); // calc sum M
+            sumByteArray(xBuf); 
             processBlock(xBuf, 0);
             inOff += xBuf.length;
             len -= xBuf.length;
             byteCount += xBuf.length;
         }
 
-        // load in the remainder.
+        
         while (len > 0) {
             update(in[inOff]);
             inOff++;
@@ -98,7 +88,7 @@ public class GOST3411Digest
         }
     }
 
-    // (i + 1 + 4(k - 1)) = 8i + k      i = 0-3, k = 1-8
+    
     private byte[] K = new byte[32];
 
     private byte[] P(byte[] in) {
@@ -112,7 +102,7 @@ public class GOST3411Digest
         return K;
     }
 
-    //A (x) = (x0 ^ x1) || x3 || x2 || x1
+    
     byte[] a = new byte[8];
 
     private byte[] A(byte[] in) {
@@ -126,14 +116,14 @@ public class GOST3411Digest
         return in;
     }
 
-    //Encrypt function, ECB mode
+    
     private void E(byte[] key, byte[] s, int sOff, byte[] in, int inOff) {
         cipher.init(true, new KeyParameter(key));
 
         cipher.processBlock(in, inOff, s, sOff);
     }
 
-    // (in:) n16||..||n1 ==> (out:) n1^n2^n3^n4^n13^n16||n16||..||n2
+    
     short[] wS = new short[16], w_S = new short[16];
 
     private void fw(byte[] in) {
@@ -145,26 +135,26 @@ public class GOST3411Digest
         cpyShortToBytes(w_S, in);
     }
 
-    // block processing
+    
     byte[] S = new byte[32];
     byte[] U = new byte[32], V = new byte[32], W = new byte[32];
 
     protected void processBlock(byte[] in, int inOff) {
         System.arraycopy(in, inOff, M, 0, 32);
 
-        //key step 1
+        
         int i = 0;
-        // H = h3 || h2 || h1 || h0
-        // S = s3 || s2 || s1 || s0
+        
+        
         System.arraycopy(H, 0, U, 0, 32);
         System.arraycopy(M, 0, V, 0, 32);
         for (int j = 0; j < 32; j++) {
             W[j] = (byte) (U[j] ^ V[j]);
         }
-        // Encrypt gost28147-ECB
-        E(P(W), S, 0, H, 0); // s0 = EK0 [h0]
+        
+        E(P(W), S, 0, H, 0); 
 
-        //keys step 2,3,4
+        
         for (i = 1; i < 4; i++) {
             byte[] tmpA = A(U);
             for (int j = 0; j < 32; j++) {
@@ -174,11 +164,11 @@ public class GOST3411Digest
             for (int j = 0; j < 32; j++) {
                 W[j] = (byte) (U[j] ^ V[j]);
             }
-            // Encrypt gost28147-ECB
-            E(P(W), S, i * 8, H, i * 8); // si = EKi [hi]
+            
+            E(P(W), S, i * 8, H, i * 8); 
         }
 
-        // x(M, H) = y61(H^y(M^y12(S)))
+        
         for (int n = 0; n < 12; n++) {
             fw(S);
         }
@@ -198,7 +188,7 @@ public class GOST3411Digest
     }
 
     private void finish() {
-        LongToBytes(byteCount * 8, L, 0); // get length into L (byteCount * 8 = bitCount)
+        LongToBytes(byteCount * 8, L, 0); 
 
         while (xBufOff != 0) {
             update((byte) 0);
@@ -222,9 +212,6 @@ public class GOST3411Digest
         return DIGEST_LENGTH;
     }
 
-    /**
-     * reset the chaining variables to the IV values.
-     */
     private static byte[] C2 = {
         0x00, (byte) 0xFF, 0x00, (byte) 0xFF, 0x00, (byte) 0xFF, 0x00, (byte) 0xFF,
         (byte) 0xFF, 0x00, (byte) 0xFF, 0x00, (byte) 0xFF, 0x00, (byte) 0xFF, 0x00,
@@ -236,7 +223,7 @@ public class GOST3411Digest
         xBufOff = 0;
 
         for (int i = 0; i < H.length; i++) {
-            H[i] = 0;  // start vector H
+            H[i] = 0;  
         }
         for (int i = 0; i < L.length; i++) {
             L[i] = 0;
@@ -245,7 +232,7 @@ public class GOST3411Digest
             M[i] = 0;
         }
         for (int i = 0; i < C[1].length; i++) {
-            C[1][i] = 0;  // real index C = +1 because index array with 0.
+            C[1][i] = 0;  
         }
         for (int i = 0; i < C[3].length; i++) {
             C[3][i] = 0;
@@ -260,7 +247,7 @@ public class GOST3411Digest
         System.arraycopy(C2, 0, C[2], 0, C2.length);
     }
 
-    //  256 bitsblock modul -> (Sum + a mod (2^256))
+    
     private void sumByteArray(byte[] in) {
         int carry = 0;
 

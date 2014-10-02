@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package benchmark;
 
 import java.io.File;
@@ -11,18 +6,11 @@ import java.util.logging.Logger;
 import jonelo.sugar.util.ExitException;
 import org.apache.commons.lang3.time.StopWatch;
 
-/**
- *
- * @author Chandan
- */
 public class BenchMark {
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
         try {
-            // TODO code application logic here
+            
             StopWatch watch = new StopWatch();
 
             if (args.length < 1) {
@@ -71,9 +59,10 @@ public class BenchMark {
                 watch.reset();
                 System.out.println("====================================================================");
                 System.out.println();
+
             }
 
-            //System.out.println(watch.getNanoTime());
+            
         } catch (ExitException ex) {
             Logger.getLogger(BenchMark.class.getName()).log(Level.SEVERE, null, ex);
         }

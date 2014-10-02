@@ -1,32 +1,26 @@
 package jonelo.jacksum.adapt.gnu.crypto.hash;
-// ----------------------------------------------------------------------------
-// This file is not part of GNU Crypto
-//
-// Has160 has been derived from the Sha160 class in GNU Crypto,
-// and it has been developed by jonelo.
-// ----------------------------------------------------------------------------
+
+
+
+
+
+
 
 import jonelo.jacksum.adapt.gnu.crypto.Registry;
 import jonelo.jacksum.adapt.gnu.crypto.util.Util;
 
 public class Has160 extends BaseHash {
 
-    // Constants and variables
-    // -------------------------------------------------------------------------
-    private static final int BLOCK_SIZE = 64; // inner block size in bytes
+    
+    
+    private static final int BLOCK_SIZE = 64; 
 
     private static final String DIGEST0 = "975E810488CF2A3D49838478124AFCE4B1C78804";
 
     private static final int[] w = new int[20];
 
-    /**
-     * caches the result of the correctness test, once executed.
-     */
     private static Boolean valid;
 
-    /**
-     * 160-bit interim result.
-     */
     private int h0, h1, h2, h3, h4;
 
     private static final int rot[] = {
@@ -44,21 +38,12 @@ public class Has160 extends BaseHash {
         18, 7, 2, 13, 8, 19, 3, 14, 9, 4, 16, 15, 10, 5, 0, 17, 11, 6, 1, 12
     };
 
-    // Constructor(s)
-    // -------------------------------------------------------------------------
-    /**
-     * Trivial 0-arguments constructor.
-     */
+    
+    
     public Has160() {
         super(Registry.HAS160_HASH, 20, BLOCK_SIZE);
     }
 
-    /**
-     * <p>
-     * Private constructor for cloning purposes.</p>
-     *
-     * @param md the instance to clone.
-     */
     private Has160(Has160 md) {
         this();
 
@@ -71,22 +56,22 @@ public class Has160 extends BaseHash {
         this.buffer = (byte[]) md.buffer.clone();
     }
 
-    // Class methods
-    // -------------------------------------------------------------------------
+    
+    
     public static final int[]
             G(int hh0, int hh1, int hh2, int hh3, int hh4, byte[] in, int offset) {
 
         return has(hh0, hh1, hh2, hh3, hh4, in, offset);
     }
 
-   // Instance methods
-    // -------------------------------------------------------------------------
-    // java.lang.Cloneable interface implementation ----------------------------
+    
+    
+    
     public Object clone() {
         return new Has160(this);
     }
 
-    // Implementation of concrete methods in BaseHash --------------------------
+    
     protected void transform(byte[] in, int offset) {
         int[] result = has(h0, h1, h2, h3, h4, in, offset);
 
@@ -102,10 +87,10 @@ public class Has160 extends BaseHash {
         int padding = (n < 56) ? (56 - n) : (120 - n);
         byte[] result = new byte[padding + 8];
 
-        // padding is always binary 1 followed by binary 0s
+        
         result[0] = (byte) 0x80;
 
-        // save number of bits, casting the long to an array of 8 bytes
+        
         long bits = count << 3;
 
         result[padding++] = (byte) bits;
@@ -134,7 +119,7 @@ public class Has160 extends BaseHash {
     }
 
     protected void resetContext() {
-        // magic SHA-1/RIPEMD160 initialisation constants
+        
         h0 = 0x67452301;
         h1 = 0xEFCDAB89;
         h2 = 0x98BADCFE;
@@ -145,16 +130,16 @@ public class Has160 extends BaseHash {
     public boolean selfTest() {
         if (valid == null) {
             Has160 md = new Has160();
-            md.update((byte) 0x61); // a
-            md.update((byte) 0x62); // b
-            md.update((byte) 0x63); // c
+            md.update((byte) 0x61); 
+            md.update((byte) 0x62); 
+            md.update((byte) 0x63); 
             String result = Util.toString(md.digest());
             valid = new Boolean(DIGEST0.equals(result));
         }
         return valid.booleanValue();
     }
 
-    // HAS specific methods ----------------------------------------------------
+    
     private static final synchronized int[]
             has(int hh0, int hh1, int hh2, int hh3, int hh4, byte[] in, int offset) {
         int A = hh0;
@@ -173,7 +158,7 @@ public class Has160 extends BaseHash {
 
         }
 
-        // rounds 0-19
+        
         w[16] = w[0] ^ w[1] ^ w[2] ^ w[3];
         w[17] = w[4] ^ w[5] ^ w[6] ^ w[7];
         w[18] = w[8] ^ w[9] ^ w[10] ^ w[11];
@@ -187,7 +172,7 @@ public class Has160 extends BaseHash {
             A = T;
         }
 
-        // rounds 20-39
+        
         w[16] = w[3] ^ w[6] ^ w[9] ^ w[12];
         w[17] = w[2] ^ w[5] ^ w[8] ^ w[15];
         w[18] = w[1] ^ w[4] ^ w[11] ^ w[14];
@@ -201,7 +186,7 @@ public class Has160 extends BaseHash {
             A = T;
         }
 
-        // rounds 40-59
+        
         w[16] = w[5] ^ w[7] ^ w[12] ^ w[14];
         w[17] = w[0] ^ w[2] ^ w[9] ^ w[11];
         w[18] = w[4] ^ w[6] ^ w[13] ^ w[15];
@@ -215,7 +200,7 @@ public class Has160 extends BaseHash {
             A = T;
         }
 
-        // rounds 60-79
+        
         w[16] = w[2] ^ w[7] ^ w[8] ^ w[13];
         w[17] = w[3] ^ w[4] ^ w[9] ^ w[14];
         w[18] = w[0] ^ w[5] ^ w[10] ^ w[15];

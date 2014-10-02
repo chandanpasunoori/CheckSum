@@ -1,12 +1,9 @@
 package jonelo.jacksum.adapt.org.bouncycastle.util;
 
-/**
- * General array utilities.
- */
 public final class Arrays {
 
     private Arrays() {
-        // static class, hide constructor
+        
     }
 
     public static boolean areEqual(

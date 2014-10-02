@@ -1,41 +1,3 @@
-/**
- * ****************************************************************************
- *
- * Sugar for Java 1.3.0 Copyright (C) 2001-2005 Dipl.-Inf. (FH) Johann Nepomuk
- * Loefflmann, All Rights Reserved, http://www.jonelo.de
- *
- * This library is free software; you can redistribute it and/or modify it under
- * the terms of the GNU Lesser General Public License as published by the Free
- * Software Foundation; either version 2 of the License, or (at your option) any
- * later version.
- *
- * This library is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
- * details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this library; if not, write to the Free Software Foundation, Inc.,
- * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- * @author jonelo@jonelo.de
- *
- * 01-May-2002: initial release
- *
- * 06-Jul-2002: bug fixed (replaceString and replaceAllString do not work if
- * oldString starts at pos 0)
- *
- * 09-Mar-2003: bug fixed (endless loop in replaceAllStrings, if oldString is
- * part of newString), testcases: replaceAllStrings("aaa","a","abc") =>
- * abcabcabc replaceAllStrings("abbbabbbabbbb","bb","") => ababa
- * replaceAllStrings("aaa","","b") => bababa new method: removeAllStrings()
- *
- * 08-May-2004: added encodeUnicode() and decodeEncodedUnicode()
- *
- * 26-May-2005: split
- *
- ****************************************************************************
- */
 package jonelo.sugar.util;
 
 import java.text.MessageFormat;
@@ -53,15 +15,9 @@ public class GeneralString {
 
     private static final String specialChars = "=: \t\r\n\f#!";
 
-    /**
-     * Creates new GeneralString
-     */
     public GeneralString() {
     }
 
-    /**
-     * Replaces none or only one String oldString to newString in String source
-     */
     public static String replaceString(String source, String oldString, String newString) {
         int pos = source.indexOf(oldString);
         if (pos > -1) {
@@ -76,9 +32,6 @@ public class GeneralString {
         }
     }
 
-    /**
-     * Replaces all oldStrings found within source by newString
-     */
     public static String replaceAllStrings(String source, String oldString, String newString) {
         StringBuffer buffer = new StringBuffer(source);
         int idx = source.length();
@@ -90,9 +43,6 @@ public class GeneralString {
         return buffer.toString();
     }
 
-    /**
-     * Replaces all oldStrings found within source by newString
-     */
     public static void replaceAllStrings(StringBuffer source, String oldString, String newString) {
         int idx = source.length();
         int offset = oldString.length();
@@ -106,9 +56,6 @@ public class GeneralString {
         return replaceAllStrings(source, oldString, "");
     }
 
-    /**
-     * Overwrites a string s at a given position with newString
-     */
     public static String replaceString(String s, int pos, String newString) {
         StringBuffer sb = new StringBuffer(s);
         for (int i = 0; i < newString.length(); i++) {
@@ -117,45 +64,33 @@ public class GeneralString {
         return sb.toString();
     }
 
-    /**
-     * @since 1.0.1
-     */
     public static String translateEscapeSequences(String s) {
         String temp = s;
-        temp = replaceAllStrings(temp, "\\t", "\t");  //  \t
-        temp = replaceAllStrings(temp, "\\n", "\n");  //  \n
-        temp = replaceAllStrings(temp, "\\r", "\r");  //  \r
-        temp = replaceAllStrings(temp, "\\\"", "\""); //  \"
-        temp = replaceAllStrings(temp, "\\\'", "\'"); //  \'
-        temp = replaceAllStrings(temp, "\\\\", "\\"); //  \\
+        temp = replaceAllStrings(temp, "\\t", "\t");  
+        temp = replaceAllStrings(temp, "\\n", "\n");  
+        temp = replaceAllStrings(temp, "\\r", "\r");  
+        temp = replaceAllStrings(temp, "\\\"", "\""); 
+        temp = replaceAllStrings(temp, "\\\'", "\'"); 
+        temp = replaceAllStrings(temp, "\\\\", "\\"); 
         return temp;
     }
 
-    /*
-     * Removes all chars c in String s
-     */
     public static String removeChar(String s, char c) {
         StringBuffer sb = new StringBuffer();
         for (int i = 0; i < s.length(); i++) {
             if (s.charAt(i) != c) {
-                sb.append(s.charAt(i)); // r += s.charAt(i);
+                sb.append(s.charAt(i)); 
             }
         }
         return sb.toString();
     }
 
-    /*
-     * remove one char at a given position
-     */
     public static String removeChar(String s, int pos) {
         StringBuffer buf = new StringBuffer(s.length() - 1);
         buf.append(s.substring(0, pos)).append(s.substring(pos + 1));
         return buf.toString();
     }
 
-    /**
-     * replaces all characters oldC in a String s with character newC
-     */
     public static String replaceChar(String s, char oldC, char newC) {
         StringBuffer sb = new StringBuffer(s);
         for (int i = 0; i < s.length(); i++) {
@@ -166,9 +101,6 @@ public class GeneralString {
         return sb.toString();
     }
 
-    /*
-     * replace one char c in String s at a given position pos
-     */
     public static String replaceChar(String s, int pos, char c) {
         StringBuffer sb = new StringBuffer(s);
         sb.setCharAt(pos, c);
@@ -222,9 +154,6 @@ public class GeneralString {
         return s2;
     }
 
-    /**
-     * Converts encoded &#92;uxxxx to unicode chars
-     */
     public static String decodeEncodedUnicode(String string) {
         char c;
         int length = string.length();
@@ -267,7 +196,7 @@ public class GeneralString {
                     default:
                         buffer.append(c);
                         break;
-                } // end-switch
+                } 
             } else {
                 buffer.append(c);
             }
@@ -275,9 +204,6 @@ public class GeneralString {
         return buffer.toString();
     }
 
-    /*
-     * Converts unicodes to encoded &#92;uxxxx
-     */
     public static String encodeUnicode(String string) {
         int length = string.length();
         StringBuffer buffer = new StringBuffer(length * 2);

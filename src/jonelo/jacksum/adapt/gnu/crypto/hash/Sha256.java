@@ -1,68 +1,54 @@
 package jonelo.jacksum.adapt.gnu.crypto.hash;
 
-// ----------------------------------------------------------------------------
-// $Id: Sha256.java,v 1.1 2003/09/26 23:40:15 raif Exp $
-//
-// Copyright (C) 2003 Free Software Foundation, Inc.
-//
-// This file is part of GNU Crypto.
-//
-// GNU Crypto is free software; you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation; either version 2, or (at your option)
-// any later version.
-//
-// GNU Crypto is distributed in the hope that it will be useful, but
-// WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-// General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program; see the file COPYING.  If not, write to the
-//
-//    Free Software Foundation Inc.,
-//    59 Temple Place - Suite 330,
-//    Boston, MA 02111-1307
-//    USA
-//
-// Linking this library statically or dynamically with other modules is
-// making a combined work based on this library.  Thus, the terms and
-// conditions of the GNU General Public License cover the whole
-// combination.
-//
-// As a special exception, the copyright holders of this library give
-// you permission to link this library with independent modules to
-// produce an executable, regardless of the license terms of these
-// independent modules, and to copy and distribute the resulting
-// executable under terms of your choice, provided that you also meet,
-// for each linked independent module, the terms and conditions of the
-// license of that module.  An independent module is a module which is
-// not derived from or based on this library.  If you modify this
-// library, you may extend this exception to your version of the
-// library, but you are not obligated to do so.  If you do not wish to
-// do so, delete this exception statement from your version.
-// ----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 import jonelo.jacksum.adapt.gnu.crypto.Registry;
 import jonelo.jacksum.adapt.gnu.crypto.util.Util;
 
-/**
- * <p>
- * Implementation of SHA2 [SHA-256] per the IETF Draft Specification.</p>
- *
- * <p>
- * References:</p>
- * <ol>
- * <li><a href="http://ftp.ipv4.heanet.ie/pub/ietf/internet-drafts/draft-ietf-ipsec-ciph-aes-cbc-03.txt">
- * Descriptions of SHA-256, SHA-384, and SHA-512</a>,</li>
- * <li>http://csrc.nist.gov/cryptval/shs/sha256-384-512.pdf</li>
- * </ol>
- *
- * @version $Revision: 1.1 $
- */
 public class Sha256 extends BaseHash {
 
-    // Constants and variables
-    // -------------------------------------------------------------------------
+    
+    
     private static final int[] k = {
         0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5,
         0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
@@ -82,38 +68,23 @@ public class Sha256 extends BaseHash {
         0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
     };
 
-    private static final int BLOCK_SIZE = 64; // inner block size in bytes
+    private static final int BLOCK_SIZE = 64; 
 
     private static final String DIGEST0
             = "BA7816BF8F01CFEA414140DE5DAE2223B00361A396177A9CB410FF61F20015AD";
 
     private static final int[] w = new int[64];
 
-    /**
-     * caches the result of the correctness test, once executed.
-     */
     private static Boolean valid;
 
-    /**
-     * 256-bit interim result.
-     */
     private int h0, h1, h2, h3, h4, h5, h6, h7;
 
-    // Constructor(s)
-    // -------------------------------------------------------------------------
-    /**
-     * Trivial 0-arguments constructor.
-     */
+    
+    
     public Sha256() {
         super(Registry.SHA256_HASH, 32, BLOCK_SIZE);
     }
 
-    /**
-     * <p>
-     * Private constructor for cloning purposes.</p>
-     *
-     * @param md the instance to clone.
-     */
     private Sha256(Sha256 md) {
         this();
 
@@ -129,21 +100,21 @@ public class Sha256 extends BaseHash {
         this.buffer = (byte[]) md.buffer.clone();
     }
 
-    // Class methods
-    // -------------------------------------------------------------------------
+    
+    
     public static final int[] G(int hh0, int hh1, int hh2, int hh3, int hh4,
             int hh5, int hh6, int hh7, byte[] in, int offset) {
         return sha(hh0, hh1, hh2, hh3, hh4, hh5, hh6, hh7, in, offset);
     }
 
-   // Instance methods
-    // -------------------------------------------------------------------------
-    // java.lang.Cloneable interface implementation ----------------------------
+    
+    
+    
     public Object clone() {
         return new Sha256(this);
     }
 
-    // Implementation of concrete methods in BaseHash --------------------------
+    
     protected void transform(byte[] in, int offset) {
         int[] result = sha(h0, h1, h2, h3, h4, h5, h6, h7, in, offset);
 
@@ -162,10 +133,10 @@ public class Sha256 extends BaseHash {
         int padding = (n < 56) ? (56 - n) : (120 - n);
         byte[] result = new byte[padding + 8];
 
-        // padding is always binary 1 followed by binary 0s
+        
         result[0] = (byte) 0x80;
 
-        // save number of bits, casting the long to an array of 8 bytes
+        
         long bits = count << 3;
         result[padding++] = (byte) (bits >>> 56);
         result[padding++] = (byte) (bits >>> 48);
@@ -193,7 +164,7 @@ public class Sha256 extends BaseHash {
     }
 
     protected void resetContext() {
-        // magic SHA-256 initialisation constants
+        
         h0 = 0x6a09e667;
         h1 = 0xbb67ae85;
         h2 = 0x3c6ef372;
@@ -207,9 +178,9 @@ public class Sha256 extends BaseHash {
     public boolean selfTest() {
         if (valid == null) {
             Sha256 md = new Sha256();
-            md.update((byte) 0x61); // a
-            md.update((byte) 0x62); // b
-            md.update((byte) 0x63); // c
+            md.update((byte) 0x61); 
+            md.update((byte) 0x62); 
+            md.update((byte) 0x63); 
             String result = Util.toString(md.digest());
             valid = new Boolean(DIGEST0.equals(result));
         }
@@ -217,7 +188,7 @@ public class Sha256 extends BaseHash {
         return valid.booleanValue();
     }
 
-    // SHA specific methods ----------------------------------------------------
+    
     private static final synchronized int[]
             sha(int hh0, int hh1, int hh2, int hh3, int hh4, int hh5, int hh6, int hh7, byte[] in, int offset) {
         int A = hh0;

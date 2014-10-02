@@ -1,27 +1,3 @@
-/**
- * ****************************************************************************
- *
- * Sugar for Java 1.3 Copyright (C) 2001-2005 Dipl.-Inf. (FH) Johann Nepomuk
- * Loefflmann, All Rights Reserved, http://www.jonelo.de
- *
- * This library is free software; you can redistribute it and/or modify it under
- * the terms of the GNU Lesser General Public License as published by the Free
- * Software Foundation; either version 2 of the License, or (at your option) any
- * later version.
- *
- * This library is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
- * details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this library; if not, write to the Free Software Foundation, Inc.,
- * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- * @author jonelo@jonelo.de
- *
- ****************************************************************************
- */
 package jonelo.sugar.util;
 
 import java.util.StringTokenizer;
@@ -59,7 +35,7 @@ public class Version implements Comparable {
     }
 
     public String toString() {
-        StringBuffer sb = new StringBuffer(8); // XX.YY.ZZ
+        StringBuffer sb = new StringBuffer(8); 
         sb.append(major);
         sb.append('.');
         sb.append(sub);
